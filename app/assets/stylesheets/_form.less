@@ -1,0 +1,67 @@
+.form {
+  input, label{
+    display: block;
+    &.hidden {
+      display: none;
+    }
+  }
+  .input {
+    margin-bottom: 10px;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    width: 300px;
+    font-size: 12px;
+    line-height: 20px;
+    &:focus {
+      border: 1px solid @theme;
+      background: mix(@theme, #ffffff, 24%);
+    }
+    &.block {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .row .input {
+    margin-bottom: 0;
+  }
+
+  textarea.input {
+    width: 600px;
+    height: 160px;
+  }
+
+  .button-group {
+    height: 30px;
+    input {
+      float: left;
+      margin-right: 15px;
+      border: none;
+      font-size: 14px;
+      padding: 5px 10px;
+      background: #dddddd;
+      color: #555555;
+      &:hover {
+        background: #bbbbbb;
+      }
+      &.theme {
+        color: #ffffff;
+        background: @theme;
+        &:hover {
+          background: darken(@theme, 10%);
+        }
+        &:disabled {
+          background: #bbbbbb;
+        }
+      }
+    }
+  }
+  span.notice {
+    position: absolute;
+    background: #FFFFDB;
+    border: 1px solid #FFFF66;
+    margin: 0 0 0 330px;
+    padding: 5px 10px;
+    line-height: 20px;
+  }
+}

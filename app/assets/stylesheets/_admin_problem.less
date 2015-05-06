@@ -1,0 +1,210 @@
+#problem-list-header {
+  margin: 10px 0;
+  h2 {
+    margin: 0;
+  }
+}
+
+#problem-edit-form {
+  #descriptionEditor {
+    height: 454px;
+    border: 1px solid #cccccc;
+  }
+  #description-col {
+    width: 70%;
+  }
+  #attachments-col {
+    width: 30%;
+
+    ul {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #cccccc;
+      li {
+        display: block;
+        position: relative;
+        line-height: 30px;
+        height: 30px;
+        cursor: default;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        i {
+          margin-left: 15px;
+        }
+        span {
+          margin-left: 5px;
+        }
+        &:before{
+          content: '';
+          display: block;
+          height: 1px;
+          background: #eeeeee;
+        }
+        &:first-child:before {
+          display: none;
+        }
+        &:hover {
+          background: #eeeeee;
+          .delete, .insert {
+            display: block;
+          }
+        }
+        &.current {
+          background: #999999;
+          color: #ffffff;
+        }
+        .delete, .insert {
+          display: none;
+          position: absolute;
+          top: 5px;
+          background: #777777;
+          height: 20px;
+          font-size: 12px;
+          line-height: 20px;
+          padding: 0 5px;
+          border-radius: 3px;
+          color: #ffffff;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+        .delete {
+          right: 5px;
+        }
+        .insert {
+          right: 60px;
+        }
+      }
+    }
+  }
+  .drop-file {
+    margin-top: 15px;
+  }
+}
+
+.problem-list {
+  div.item {
+    text-align: center;
+  }
+
+  div.item a {
+    color: #555555;
+    text-decoration: none;
+    display: block;
+    &:hover {
+      color: darken(@theme, 10%);
+    }
+  }
+}
+
+.drop-file {
+  border: 3px dashed #cccccc;
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  line-height: 34px;
+  height: 40px;
+  &.dz-drag-hover {
+    border-color: red;
+  }
+  .spinner {
+    display: none;
+    position: absolute;
+    background: #ffffff;
+    width: 100%;
+    height: 34px;
+    margin: 0;
+    border: 5px solid transparent;
+    div {
+      background-color: #999999;
+    }
+  }
+}
+
+#problem-resources-editor {
+  #resource-list {
+    width: 30%;
+    ul {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #cccccc;
+      li {
+        display: block;
+        position: relative;
+        line-height: 30px;
+        height: 30px;
+        cursor: default;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        i {
+          margin-left: 15px;
+        }
+        span {
+          margin-left: 5px;
+        }
+        &:before{
+          content: '';
+          display: block;
+          height: 1px;
+          background: #eeeeee;
+        }
+        &:first-child:before {
+          display: none;
+        }
+        &:hover {
+          background: #eeeeee;
+          .delete {
+            display: block;
+          }
+        }
+        &.current {
+          background: #999999;
+          color: #ffffff;
+        }
+        .delete {
+          display: none;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          background: #777777;
+          height: 20px;
+          font-size: 12px;
+          line-height: 20px;
+          padding: 0 5px;
+          border-radius: 3px;
+          color: #ffffff;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  #resource-preview {
+    width: 70%;
+    div.preview-wrapper {
+      height: 457px;
+      border: 1px solid #cccccc;
+      overflow-y: auto;
+      pre {
+        white-space: pre-wrap;
+        margin: 10px;
+        .mono-font;
+      }
+    }
+  }
+
+  .drop-file {
+    margin-top: 15px;
+  }
+}
+
+#upload-record {
+  margin-top: 20px;
+}

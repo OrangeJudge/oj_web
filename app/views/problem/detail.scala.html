@@ -1,0 +1,120 @@
+@(problem: Problem)
+
+@layout(problem.slug + ". " + problem.title + " - Problem", "problem",
+  Seq(routes.Assets.versioned("javascripts/problem.js").toString()), Seq()) {
+  <nav class="secondary-nav">
+    <ul>
+      <li><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
+      <li><a href="@routes.SolutionController.solutionListPage()">Solution List</a></li>
+      <li><a href="@routes.UserController.mySolutionListRedirect()">My Submissions</a></li>
+      <li><a href="@routes.UserController.getMySolvedProblemsPage()">My Solved Problems</a></li>
+    </ul>
+  </nav>
+
+  <h2>@problem.slug. @problem.title</h2>
+
+  <div id="problem-detail">
+
+    <div class="description">
+      <h3>Description</h3>
+      <div class="content">
+        @Html(problem.getDescriptionHTML)
+      </div>
+    </div>
+  </div>
+
+  <div id="submit-solution">
+    <h3>Submit Your Solution</h3>
+    <form id="submit-form" class="form">
+      <input class="hidden" id="slug" value="@problem.slug">
+      <label for="language">Language</label>
+      <select class="input" id="language" required>
+        <option value="10">C</option>
+        <option value="20">C++</option>
+        <option value="30">Java</option>
+      </select>
+      <label for="code">Code</label>
+      <div id="code"></div>
+      <div class="button-group">
+        <input class="theme" type="submit" value="Submit" id="submit">
+      </div>
+      <div class="message"></div>
+    </form>
+  </div>
+
+  <div id="problem-solution-list">
+    <h3>Submissions</h3>
+    <div class="row">
+      <div class="col col-50">
+        <div class="panel">
+          <div class="heading">
+            My Submissions
+            @if(UserController.currentUser() != null) {
+              <div class="pull-right">
+                <a href="@routes.SolutionController.solutionListPage()?user=@UserController.currentUser().name&problem=@problem.slug">
+                View more
+                </a>
+              </div>
+            }
+          </div>
+          <div class="body">
+            <div id="my-submission-list" class="table-list table-list-small">
+              <div class="item header">
+                <div class="result col-36">Result</div>
+                <div class="language col-20">Language</div>
+                <div class="memory col-12">Memory</div>
+                <div class="time col-12">Time</div>
+                <div class="submitTime col-20">Submit Time</div>
+              </div>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col col-50">
+        <div class="panel">
+          <div class="heading">
+            Recently Accepted Submissions
+            <div class="pull-right">
+              <a href="@routes.SolutionController.solutionListPage()?problem=@problem.slug&result=200">
+                View more
+              </a>
+            </div>
+          </div>
+          <div class="body">
+            <div id="all-submission-list" class="table-list table-list-small">
+              <div class="item header">
+                <div class="language col-30">Language</div>
+                <div class="user col-40">User</div>
+                <div class="submitTime col-30">Submit Time</div>
+              </div>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden" id="my-submission-item-template">
+    <li>
+      <div class="item">
+        <div class="result col-36"></div>
+        <div class="language col-20"></div>
+        <div class="memory col-12"></div>
+        <div class="time col-12"></div>
+        <div class="submitTime col-20"></div>
+      </div>
+    </li>
+  </div>
+
+  <div class="hidden" id="all-submission-item-template">
+    <li>
+      <div class="item">
+        <div class="language col-30"></div>
+        <div class="user col-40"></div>
+        <div class="submitTime col-30"></div>
+      </div>
+    </li>
+  </div>
+}

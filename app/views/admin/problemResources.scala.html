@@ -1,0 +1,76 @@
+@(problem: Problem)
+@admin.frame("Problem Resources", "problem",
+  Seq(routes.Assets.versioned("javascripts/dropzone.js").toString(),
+      routes.Assets.versioned("javascripts/admin/problemResources.js").toString()
+  ), Seq()) {
+
+  <div id="problem-list-header" class="row">
+    <div class="col">
+      <h2>Edit Problem: @problem.slug. @problem.title</h2>
+    </div>
+    <div class="col">
+      <a id="add-problem" href="@routes.AdminController.problemListPage()" class="btn">Back to List</a>
+    </div>
+  </div>
+
+  <nav class="secondary-nav">
+    <ul>
+      <li><a href="@routes.AdminController.problemEditPage(problem.id)">
+        Basic Information
+      </a></li>
+      <li class="active">Test Cases</li>
+      <li><a href="#">Test Submit</a></li>
+      <li><a href="@routes.AdminController.exportProblem(problem.id)">Export</a></li>
+      <li><a href="@routes.ProblemController.problemDetailPage(problem.slug)" target="_blank">View Problem</a></li>
+    </ul>
+  </nav>
+
+  <div id="problem-resources-editor" class="row">
+    <div id="resource-list" class="col">
+      <label for="upload-file-list">Resource List</label>
+      <ul id="upload-file-list">
+      </ul>
+      <div id="drop-file" class="drop-file">
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        Drag files here or click to upload
+      </div>
+    </div>
+    <div id="resource-preview" class="col">
+      <label for="preview-frame">Resource Preview</label>
+      <div class="preview-wrapper">
+        <div class="spinner hidden">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        <pre id="preview-frame"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div id="upload-record" class="hidden">
+    <h4>Upload Record</h4>
+    <div id="upload-progress"></div>
+  </div>
+
+
+  <div id="upload-progress-template" class="hidden">
+    <div class="upload-item">
+      <span data-dz-name></span>
+    </div>
+  </div>
+
+  <div id="file-list-item-template" class="hidden">
+    <div class="delete">Delete</div>
+    <i class="fa"></i>
+    <span class="filename">filename</span>
+  </div>
+
+  <script type="text/javascript">
+    window.problemId = @problem.id;
+  </script>
+}

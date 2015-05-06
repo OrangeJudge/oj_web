@@ -1,0 +1,75 @@
+.problem-list {
+  .table-list;
+  
+  div.title a {
+    color: #555555;
+    text-decoration: none;
+    display: block;
+    &:hover {
+      color: darken(@theme, 10%);
+    }
+  }
+  div.rating, div.id, div.solved, div.difficulty {
+    text-align: center;
+  }
+  div.id, div.solved {
+    width: 5%;
+  }
+  div.title {
+    width: 70%;
+    padding-left: 10px;
+  }
+}
+
+.solution-list {
+  .table-list;
+
+  div.item {
+    text-align: center;
+  }
+
+  div.problem {
+    width: 25%;
+  }
+
+  div.result {
+    width: 20%;
+  }
+
+  div.loading {
+    width: 100%;
+  }
+
+  div.time {
+    width: 8%;
+  }
+
+  div.memory {
+    width: 7%;
+  }
+
+}
+
+#problem-detail {
+  .description {
+    img {
+      max-width: 800px;
+    }
+  }
+}
+
+#submit-solution {
+  #code {
+    height: 300px;
+    margin-bottom: 10px;
+  }
+  form {
+    margin: 10px 0;
+  }
+}
+
+#problem-solution-list {
+  .row {
+    margin: 10px 0;
+  }
+}

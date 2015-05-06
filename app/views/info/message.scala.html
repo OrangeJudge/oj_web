@@ -1,0 +1,22 @@
+@(title: String, content: String)
+
+
+@layout(title, "", Seq(), Seq()) {
+
+  <div class="content">
+
+    <h2>@title</h2>
+
+    <p>@content</p>
+
+    <p>You may wish to...</p>
+
+    <ul>
+      <li><a href="@routes.PortalController.index()">Go to homepage</a></li>
+      <li><a href="javascript:history.back()">Return to previous page</a></li>
+      <li><a href="@routes.PortalController.contactUs()">Contact us for support</a></li>
+    </ul>
+
+  </div>
+
+}

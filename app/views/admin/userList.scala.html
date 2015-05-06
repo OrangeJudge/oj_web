@@ -1,0 +1,36 @@
+@(users: java.util.List[User])
+
+@admin.frame("User List", "user", Seq(routes.Assets.versioned("javascripts/admin/userList.js").toString()), Seq()) {
+  <h2>User List</h2>
+
+  <div class="row">
+    <div class="user-list table-list">
+      <div class="item header">
+        <div class="id">#</div>
+        <div class="username">Username</div>
+        <div class="displayName">Display Name</div>
+        <div class="country">Country</div>
+        <div class="school">School</div>
+        <div class="gender">Gender</div>
+        <div class="createTime">Register Time</div>
+        <div class="edit"></div>
+      </div>
+      <ul>
+      @for(user <- users) {
+        <li>
+          <div class="item">
+            <div class="id">@user.id</div>
+            <div class="username">@user.name</div>
+            <div class="displayName">@user.displayName</div>
+            <div class="country">@user.country</div>
+            <div class="school">@user.school</div>
+            <div class="gender">@user.gender</div>
+            <div class="createTime">@user.createTime.getTime</div>
+            <div class="edit"><a href="@routes.AdminController.editUserPage(user.id)">Edit</a></div>
+          </div>
+        </li>
+      }
+      </ul>
+    </div>
+  </div>
+}

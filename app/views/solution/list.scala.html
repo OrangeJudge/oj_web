@@ -1,0 +1,48 @@
+@layout("Judge Status", "problem", Seq(routes.Assets.versioned("javascripts/solutionList.js").toString()), Seq()) {
+  <nav class="secondary-nav">
+    <ul>
+      <li><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
+      <li id="solution-list-li" class="active"><a href="@routes.SolutionController.solutionListPage()">Solution List</a></li>
+      <li id="my-submission-li"><a href="@routes.UserController.mySolutionListRedirect()">My Submissions</a></li>
+      <li><a href="@routes.UserController.getMySolvedProblemsPage()">My Solved Problems</a></li>
+    </ul>
+  </nav>
+
+  <p>
+    Showing most resent solutions to <span id="problem-name">all problems</span> by <span id="user-name">all users</span>.
+  </p>
+
+  <div class="solution-list">
+    <div class="item header">
+      <div class="id">#</div>
+      <div class="problem">Problem</div>
+      <div class="user">User</div>
+      <div class="result">Result</div>
+      <div class="language">Language</div>
+      <div class="memory">Memory</div>
+      <div class="time">Time</div>
+      <div class="submitTime">Submit Time</div>
+    </div>
+    <ul id="solution-list">
+      <li>
+        <div class="item">
+          <div class="loading">Loading solution list ...</div>
+        </div>
+      </li>
+    </ul>
+    <div id="solution-item-template" class="hidden">
+      <div class="item">
+        <div class="id">#</div>
+        <div class="problem">
+          <a href="#">slug. problem</a>
+        </div>
+        <div class="user">User</div>
+        <div class="result">Result</div>
+        <div class="language">Language</div>
+        <div class="memory">Memory</div>
+        <div class="time">Time</div>
+        <div class="submitTime">Submit Time</div>
+      </div>
+    </div>
+  </div>
+}

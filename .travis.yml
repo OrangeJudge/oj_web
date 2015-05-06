@@ -1,0 +1,23 @@
+language: scala
+scala:
+- 2.11.1
+jdk:
+- oraclejdk8
+before_install:
+- unset SBT_OPTS JVM_OPTS
+- export SBT_OPTS="-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
+script:
+- ./activator dist
+- ./scripts_deploy/release.sh
+cache:
+  directories:
+  - target
+  - project/target
+deploy:
+  provider: gcs
+  access_key_id: GOOGTBSW7K6IMFC3GH6A
+  secret_access_key:
+    secure: Kd3e0mDSSY2M17GlAzy8QsyFOCPJrO0XhLGd5ujppOYD/WGf2c4GwymuWgV7igERnbyj22vOSAyjN+o6nCY9gJKUVl5dTPHXj211FTondYGALrFy+b01EirR3xCiOts7HUszRjNaiYxJ0cCZJDXc5Qmtecx85QdCkgaGIJH4bGs=
+  bucket: orange-judge-builds
+  skip_cleanup: true
+  local_dir: target/release

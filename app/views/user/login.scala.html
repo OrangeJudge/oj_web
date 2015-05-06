@@ -1,0 +1,14 @@
+@layout("Login", "user", Seq(routes.Assets.versioned("javascripts/login.js").toString()), Seq()) {
+    <h2>Login</h2>
+    <form id="login-form">
+        <label for="username">Username or Email</label>
+        <input class="input" id="username" required>
+        <label for="password">Password</label>
+        <input class="input" id="password" type="password" required>
+        <div class="button-group">
+            <input class="theme" type="submit" value="Login" id="submit">
+            <input type="button" value="Go to Register" id="redirect">
+        </div>
+    </form>
+    <div id="message"></div>
+}

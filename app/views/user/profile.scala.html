@@ -1,0 +1,114 @@
+@(user: User)
+
+@layout(user.displayName + " - User", "user", Seq(routes.Assets.versioned("javascripts/profile.js").toString()), Seq()) {
+  <script type="application/javascript">
+    window.profileUser = @user.id;
+    window.profileUserName = "@user.name";
+  </script>
+  <div id="user-profile" class="row">
+    <div class="col col-25">
+      <div id="avatar-box">
+        <a href="@routes.UserController.editProfilePage()">
+          <img id="avatar" src="@routes.Assets.versioned("images/avatar.jpg")" alt="@user.displayName">
+        </a>
+      </div>
+      <h2>
+        <span id="display-name">@user.displayName</span>
+        <span id="username">@user.name</span>
+      </h2>
+      <ul id="profile-data">
+        <li>
+          <i class="fa fa-map-marker"></i> <span class="country">@user.country</span>
+        </li>
+        <li>
+          <i class="fa fa-university"></i> @user.school
+        </li>
+      </ul>
+    </div>
+    <div class="col col-75">
+      <div class="row">
+        <div class="col col-50">
+          <div class="panel">
+            <div class="heading">Recently solved by @user.displayName</div>
+            <div class="body">
+              <div id="solved-problem-list" class="table-list table-list-small">
+                <ul></ul>
+                <div class="hidden" id="solved-problem-list-item-template">
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="solver col-30">
+                        <i class="fa fa-check"></i>
+                        <span class="solver-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-50">
+          <div class="panel">
+            <div class="heading">Recently starred by @user.displayName</div>
+            <div class="body">
+              <div id="starred-problem-list" class="table-list table-list-small">
+                <ul>
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="star col-30">
+                        <i class="fa fa-star"></i>
+                        <span class="star-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="star col-30">
+                        <i class="fa fa-star"></i>
+                        <span class="star-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="star col-30">
+                        <i class="fa fa-star"></i>
+                        <span class="star-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="star col-30">
+                        <i class="fa fa-star"></i>
+                        <span class="star-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item">
+                      <div class="problem col-70">Problem</div>
+                      <div class="star col-30">
+                        <i class="fa fa-star"></i>
+                        <span class="star-number">0</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h3>Activities</h3>
+      <div>
+        Sorry, the activity log is not available yet.
+      </div>
+    </div>
+  </div>
+}

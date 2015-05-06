@@ -1,0 +1,44 @@
+@(problems: java.util.List[Problem], user: User)
+
+@layout("Problems", "problem", Seq(routes.Assets.versioned("javascripts/problemList.js").toString()), Seq()) {
+  <nav class="secondary-nav">
+    <ul>
+      @if(user != null && UserController.currentUser() != null && user.equals(UserController.currentUser())) {
+        <li><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
+        <li><a href="@routes.SolutionController.solutionListPage()">Solution List</a></li>
+        <li><a href="@routes.UserController.mySolutionListRedirect()">My Submissions</a></li>
+        <li class="active"><a href="@routes.UserController.getMySolvedProblemsPage()">My Solved Problems</a></li>
+      } else {
+        <li class="active"><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
+        <li><a href="@routes.SolutionController.solutionListPage()">Solution List</a></li>
+        <li><a href="@routes.UserController.mySolutionListRedirect()">My Submissions</a></li>
+        <li><a href="@routes.UserController.getMySolvedProblemsPage()">My Solved Problems</a></li>
+      }
+    </ul>
+  </nav>
+
+  <div class="problem-list">
+    <div class="item header">
+      <div class="id">#</div>
+      <div class="title">Title</div>
+      <div class="rating">Rating</div>
+      <div class="solved"># Solved</div>
+      <div class="difficulty">Difficulty</div>
+    </div>
+    <ul>
+      @for(problem <- problems) {
+        <li>
+          <div class="item">
+            <div class="id">@problem.slug</div>
+            <div class="title">
+              <a href="@routes.ProblemController.problemDetailPage(problem.slug)">@problem.title</a>
+            </div>
+            <div class="rating"><div class="star star-5">5</div></div>
+            <div class="solved">37</div>
+            <div class="difficulty"><div class="star star-5">5</div></div>
+          </div>
+        </li>
+      }
+    </ul>
+  </div>
+}

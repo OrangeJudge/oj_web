@@ -1,0 +1,31 @@
+@layout("Register", "user", Seq(routes.Assets.versioned("javascripts/register.js").toString()), Seq()) {
+  <h2>Register</h2>
+  <form id="login-form">
+    <label for="username">Username</label>
+    <input class="input" id="username" required>
+    <label for="email">Email</label>
+    <input class="input" id="email" type="email" required>
+    <label for="displayName">Display Name</label>
+    <input class="input" id="displayName" required>
+    <label for="country">Country</label>
+    <select class="input" id="country">
+      <option>Loading country list...</option>
+    </select>
+    <label for="school">School or Company</label>
+    <input class="input" id="school" required>
+    <label for="gender">Gender</label>
+    <select class="input" id="gender">
+      <option value="1" selected>Female</option>
+      <option value="0">Male</option>
+    </select>
+    <label for="password">Password</label>
+    <input class="input" id="password" type="password" required>
+    <label for="password2">Confirm Password</label>
+    <input class="input" id="password2" type="password" required>
+    <div class="button-group">
+      <input id="submit" class="theme" type="submit" value="Register">
+      <input id="redirect" type="button" value="Go to Login">
+    </div>
+  </form>
+  <div id="message"></div>
+}

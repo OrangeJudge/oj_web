@@ -1,0 +1,11 @@
+@(user: User)
+@admin.frame("User Detail", "user", Seq(routes.Assets.versioned("javascripts/admin/userDetail.js").toString()), Seq()) {
+  <script type="application/javascript">
+    window.editingUserId = @user.id;
+  </script>
+
+  <h2>User Detail: @user.displayName</h2>
+
+  <a href="@routes.AdminController.userListPage()" class="btn">Back to List</a>
+  <a href="javascript:" onclick="deleteUser()" class="btn">Delete</a>
+}

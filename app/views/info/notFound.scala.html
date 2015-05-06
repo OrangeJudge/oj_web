@@ -1,0 +1,24 @@
+@layout("404 Not Found", "", Seq(), Seq()) {
+
+  <div class="content">
+
+    <h2>Page Not Found</h2>
+
+    <p>Sorry, the page you requested is not available.</p>
+
+    <p>You may wish to...</p>
+
+    <ul>
+      <li><a href="@routes.PortalController.index()">Go to homepage</a></li>
+      <li><a href="javascript:history.back()">Return to previous page</a></li>
+      <li><a href="@routes.PortalController.contactUs()">Contact us for support</a></li>
+    </ul>
+
+    <p>
+      If you think that this is an error, you could also
+      <a href="https://github.com/OrangeJudge/oj_web/issues/new">report a bug on GitHub</a>.
+    </p>
+
+  </div>
+
+}

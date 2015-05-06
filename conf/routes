@@ -1,0 +1,73 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+
+# Attention: Please do not edit the routes. Some function may not work properly after changes.
+
+# Public
+GET           /                                                 controllers.PortalController.index()
+GET           /about                                            controllers.PortalController.about()
+GET           /terms                                            controllers.PortalController.terms()
+GET           /contactUs                                        controllers.PortalController.contactUs()
+
+# Account namespace require HTTPS.
+GET           /account/register                                 controllers.UserController.registerPage()
+GET           /account/login                                    controllers.UserController.loginPage()
+GET           /account/logout                                   controllers.UserController.logoutRedirect()
+GET           /account/profile                                  controllers.UserController.myProfilePage()
+GET           /account/settings                                 controllers.UserController.editProfilePage()
+GET           /account/email/verify/:username/:pass             controllers.UserController.verifyEmail(username:String, pass: String)
+GET           /account/solutions                                controllers.UserController.mySolutionListRedirect()
+GET           /account/solved-problems                          controllers.UserController.getMySolvedProblemsPage()
+POST          /asyn/account/register                            controllers.UserController.register()
+POST          /asyn/account/login                               controllers.UserController.login()
+POST          /asyn/account/settings/basic                      controllers.UserController.editBasicProfile()
+POST          /asyn/account/settings/password                   controllers.UserController.changePassword()
+POST          /asyn/account/email/verify-request                controllers.UserController.requestVerificationEmail()
+
+GET           /user/:username                                   controllers.UserController.profilePage(username: String)
+GET           /user/:username/solutions                         controllers.UserController.userSolutionListRedirect(username: String)
+GET           /user/:username/solved-problems                   controllers.UserController.getSolvedProblemsPage(username: String)
+GET           /asyn/user/:username/solved-problems              controllers.UserController.getSolvedProblems(username: String)
+GET           /asyn/user/:username                              controllers.UserController.userProfile(username: String)
+
+GET           /problem/                                         controllers.ProblemController.problemListPage()
+GET           /problem/:slug                                    controllers.ProblemController.problemDetailPage(slug: String)
+GET           /problem/:id/assets/:filename                     controllers.ProblemController.assetFile(id: Long, filename: String)
+GET           /asyn/problem/:slug                               controllers.ProblemController.problemDetail(slug: String)
+POST          /asyn/problem/:slug/submit                        controllers.ProblemController.handleProblemSubmit(slug: String)
+
+GET           /solution/                                        controllers.SolutionController.solutionListPage()
+GET           /solution/:id                                     controllers.SolutionController.solutionPage(id: Long)
+GET           /asyn/solution/recent                             controllers.SolutionController.recentSolutions()
+
+GET           /contest/                                         controllers.ContestController.contestListPage()
+
+# Admin
+GET           /admin/                                           controllers.AdminController.adminHomePage()
+GET           /admin/user                                       controllers.AdminController.userListPage()
+GET           /admin/user/:id                                   controllers.AdminController.editUserPage(id: Long)
+DELETE        /admin/user/:id                                   controllers.AdminController.deleteUser(id: Long)
+GET           /admin/problem                                    controllers.AdminController.problemListPage()
+GET           /admin/problem/:id/package.zip                    controllers.AdminController.exportProblem(id: Long)
+GET           /admin/problem/:id/basic                          controllers.AdminController.problemEditPage(id: Long)
+POST          /admin/problem/:id/basic/edit                     controllers.AdminController.problemEditRedirect(id: Long)
+POST          /admin/problem/:id/basic/file                     controllers.AdminController.handleUploadAssetFile(id: Long)
+GET           /admin/problem/:id/basic/file                     controllers.AdminController.listAssetFiles(id: Long)
+DELETE        /admin/problem/:id/basic/file/:filename           controllers.AdminController.deleteAssetFile(id: Long, filename: String)
+GET           /admin/problem/:id/resource                       controllers.AdminController.problemResourcesPage(id: Long)
+POST          /admin/problem/:id/resource/file                  controllers.AdminController.handleUploadResourceFile(id: Long)
+GET           /admin/problem/:id/resource/file                  controllers.AdminController.listResourceFiles(id: Long)
+GET           /admin/problem/:id/resource/file/:filename        controllers.AdminController.resourceFilePreview(id: Long, filename: String)
+DELETE        /admin/problem/:id/resource/file/:filename        controllers.AdminController.deleteResourceFile(id: Long, filename: String)
+PUT           /admin/problem/:slug                              controllers.AdminController.createProblem(slug: String)
+POST          /admin/problem/package                            controllers.AdminController.handleUploadProblemPackage()
+GET           /admin/contest                                    controllers.AdminController.contestListPage()
+
+# Map static resources from the /public folder to the /assets URL path
+GET           /assets/*file                                     controllers.Assets.versioned(path="/public", file: Asset)
+
+# APIs for non-browser access
+GET           /api/judge/solution                               controllers.JudgeController.judgeFetchSolution()
+POST          /api/judge/solution/:id/update                    controllers.JudgeController.handleJudgeUpdateResult(id: Long)
+GET           /api/judge/problem/:id/hash.json                  controllers.JudgeController.getProblemResourcesHash(id: Long)
+GET           /api/judge/problem/:id/package.zip                controllers.JudgeController.getProblemResourcesZip(id: Long)

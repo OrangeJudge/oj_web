@@ -1,0 +1,92 @@
+@(problems: java.util.List[Problem])
+
+@admin.frame("Manage Problems", "problem", Seq(
+  routes.Assets.versioned("javascripts/dropzone.js").toString(),
+  routes.Assets.versioned("javascripts/admin/problemList.js").toString()
+), Seq()) {
+  <div id="problem-list-header" class="row">
+    <div class="col">
+      <h2>Problem List</h2>
+    </div>
+    <div class="col">
+      <a id="add-problem" href="javascript:" class="btn">Add a Problem</a>
+      <a id="import-problem" href="javascript:" class="btn">Import Problem Packages</a>
+    </div>
+  </div>
+
+  <div id="add-problem-zone" class="row hidden">
+    <div class="col col-50">
+      <div class="panel">
+        <div class="heading">Add a Problem
+          <div class="pull-right"><a href="javascript:" onclick="closeAddProblem()">Cancel</a></div>
+        </div>
+        <div class="body">
+          <form class="form">
+            <label for="slug">Problem Slug</label>
+            <input class="input" id="slug" required>
+            <div class="button-group">
+              <input class="theme" type="submit" value="Create" id="submit">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="import-problem-zone" class="row hidden">
+    <div class="col col-50">
+      <div class="panel">
+        <div class="heading">Import Problem Package
+          <div class="pull-right"><a href="javascript:" onclick="closeImportProblem()">Cancel</a></div>
+        </div>
+        <div class="body">
+          <div id="drop-file" class="drop-file">
+            <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+            Drag files here or click to upload
+          </div>
+          <div id="upload-progress-template" class="hidden">
+            <div class="upload-item">
+              <span data-dz-name></span>
+            </div>
+          </div>
+          <div id="upload-progress" class="hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="problem-list table-list">
+      <div class="item header">
+        <div class="slug">#</div>
+        <div class="title col-40">Title</div>
+        <div class="status">Status</div>
+        <div class="edit">Edit</div>
+        <div class="resources">Resources</div>
+        <div class="test">Test</div>
+        <div class="view">View</div>
+      </div>
+      <ul>
+      @for(problem <- problems) {
+        <li>
+          <div class="item">
+            <div class="slug">@problem.slug</div>
+            <div class="title col-40">@problem.title</div>
+            <div class="status">@problem.status</div>
+            <div class="edit"><a href="@routes.AdminController.problemEditPage(problem.id)">Edit</a></div>
+            <div class="resources"><a href="@routes.AdminController.problemResourcesPage(problem.id)">Resources</a></div>
+            <div class="test">Test Submit</div>
+            <div class="view">
+              <a href="@routes.ProblemController.problemDetailPage(problem.slug)" target="_blank">View</a>
+            </div>
+          </div>
+        </li>
+      }
+      </ul>
+    </div>
+  </div>
+}

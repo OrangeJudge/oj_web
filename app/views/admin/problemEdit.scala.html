@@ -1,0 +1,136 @@
+@(problem: Problem)
+
+@admin.frame("Problem Editor", "problem",
+  Seq(routes.Assets.versioned("javascripts/dropzone.js").toString(),
+      routes.Assets.versioned("javascripts/admin/problemEdit.js").toString()),
+  Seq()) {
+
+  <div id="problem-list-header" class="row">
+    <div class="col">
+      <h2>Edit Problem: @problem.slug. @problem.title</h2>
+    </div>
+    <div class="col">
+      <a id="add-problem" href="@routes.AdminController.problemListPage()" class="btn">Back to List</a>
+    </div>
+  </div>
+
+  <nav class="secondary-nav">
+    <ul>
+      <li class="active">Basic Information</li>
+      <li><a href="@routes.AdminController.problemResourcesPage(problem.id)">Test Cases</a></li>
+      <li><a href="#">Test Submit</a></li>
+      <li><a href="@routes.AdminController.exportProblem(problem.id)">Export</a></li>
+      <li><a href="@routes.ProblemController.problemDetailPage(problem.slug)" target="_blank">View Problem</a></li>
+    </ul>
+  </nav>
+
+  <form id="problem-edit-form" action="@routes.AdminController.problemEditRedirect(problem.id)" method="post" class="form">
+
+    <div class="row">
+      <div class="col col-10">
+        <label for="slug">Slug</label>
+        <input class="input block" id="slug" name="slug" value="@problem.slug">
+      </div>
+      <div class="col col-70">
+        <label for="title">Title</label>
+        <input class="input block" id="title" name="title" value="@problem.title">
+      </div>
+      <div class="col col-20">
+        <label for="status">Status</label>
+        <select class="input block" id="status" name="status">
+          @if(problem.status == 0) {
+            <option value="0" selected>Normal</option>
+          } else {
+            <option value="0">Normal</option>
+          }
+          @if(problem.status == 1) {
+            <option value="1" selected>Editing</option>
+          } else {
+            <option value="1">Editing</option>
+          }
+          @if(problem.status == 3) {
+            <option value="3" selected>Read Only</option>
+          } else {
+            <option value="3">Read Only</option>
+          }
+          @if(problem.status == 4) {
+            <option value="4" selected>Deleted</option>
+          } else {
+            <option value="4">Deleted</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="description-col" class="col">
+        <label for="description">Description</label>
+        <textarea class="hidden" id="description" name="description">@problem.description</textarea>
+        <div id="descriptionEditor">@problem.description</div>
+      </div>
+      <div id="attachments-col" class="col">
+        <label>Attachments</label>
+        <ul id="upload-file-list">
+        </ul>
+        <div id="file-list-item-template" class="hidden">
+          <div class="delete">Delete</div>
+          <div class="insert">Insert</div>
+          <i class="fa"></i>
+          <span class="filename">filename</span>
+        </div>
+        <div id="drop-file" class="drop-file">
+          <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+          Drag files here or click to upload
+        </div>
+        <div id="upload-progress" class="hidden"></div>
+        <div id="upload-progress-template" class="hidden">
+          <div class="upload-item">
+            <span data-dz-name></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-35">
+        <label for="slug">Time Limit (ms)</label>
+        <input class="input block" id="timeLimit" name="timeLimit" value="@problem.timeLimit">
+      </div>
+      <div class="col col-35">
+        <label for="title">Memory Limit (MiB)</label>
+        <input class="input block" id="memoryLimit" name="memoryLimit" value="@problem.memoryLimit">
+      </div>
+      <div class="col col-30">
+        <label for="specialJudge">Special Judge?</label>
+        <select class="input block" id="specialJudge" name="specialJudge">
+          @if(problem.specialJudge) {
+            <option value="1" selected>Yes</option>
+            <option value="0">No</option>
+          } else {
+            <option value="1">Yes</option>
+            <option value="0" selected>No</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <label for="tags">Tags</label>
+    <input class="input block" id="title" name="tags" value="@problem.tags">
+
+    <label for="source">Source</label>
+    <input class="input block" id="source" name="source" value="@problem.source">
+
+    <div class="button-group">
+      <input class="theme" type="submit" value="Save">
+    </div>
+  </form>
+
+  <script type="text/javascript">
+    window.problemId = @problem.id;
+  </script>
+
+}

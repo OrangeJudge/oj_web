@@ -1,0 +1,78 @@
+@layout("Edit Profile", "user", Seq(routes.Assets.versioned("javascripts/profileEdit.js").toString()), Seq()) {
+  <h2>Edit Profile</h2>
+
+  <div id="edit-profile">
+  @defining(UserController.currentUser()) { user=>
+    <h3>Profile Image</h3>
+    <form id="avatar-form" class="form">
+      <div id="avatar-wrapper">
+        <img src="@routes.Assets.versioned("images/avatar.jpg")" alt="Avatar">
+      </div>
+      <a href="#" class="btn" id="upload-avatar">Upload new profile image</a>
+    </form>
+
+
+    <h3>Basic Information</h3>
+    <form id="basic-form" class="form">
+      <label for="username">Username</label>
+      <span id="username-notice" class="notice">Please
+        @if(OJController.isOrangeJudgeDotCom) {
+          <a href="@routes.PortalController.contactUs()" target="_blank">contact us</a>
+        } else {
+          contact system admin
+        }
+        if you need to change your username.</span>
+      <input class="input" id="username" value="@user.name" readonly>
+      <label for="email">Email</label>
+      @if(!user.isEmailVerified) {
+        <span id="email-notice" class="notice">
+          You have not verify your email address.
+          <a href="javascript:" onclick="resendVerification()">Resend verification email.</a>
+        </span>
+      }
+      <input class="input" id="email" type="email" value="@user.email" required>
+      <label for="displayName">Display Name</label>
+      <input class="input" id="displayName" value="@user.displayName" required>
+      <label for="country">Country</label>
+      <select class="input" id="country">
+        <option>Loading country list...</option>
+      </select>
+      <label for="school">School or Company</label>
+      <input class="input" id="school" value="@user.school" required>
+      <label for="gender">Gender</label>
+      <select class="input" id="gender">
+        @if(user.gender) {
+        <option value="1" selected>Female</option>
+        <option value="0">Male</option>
+        } else {
+        <option value="1">Female</option>
+        <option value="0" selected>Male</option>
+        }
+      </select>
+      <div class="button-group">
+        <input id="submit-basic-form" class="theme" type="submit" value="Save Changes" disabled>
+      </div>
+      <div class="message"></div>
+    </form>
+    <script type="text/javascript">
+    window.userCountry = "@user.country";
+    </script>
+
+
+    <h3>Change Password</h3>
+    <form id="password-form" class="form">
+      <label for="password-old">Old Password</label>
+      <input class="input" id="password-old" type="password" required>
+      <label for="password">Password</label>
+      <input class="input" id="password" type="password" required>
+      <label for="password2">Confirm Password</label>
+      <input class="input" id="password2" type="password" required>
+      <div class="button-group">
+        <input id="submit-password-form" class="theme" type="submit" value="Change Password" disabled>
+      </div>
+      <div class="message"></div>
+    </form>
+  }
+  </div>
+
+}

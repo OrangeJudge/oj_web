@@ -1,0 +1,80 @@
+@(solution: Solution)
+
+@layout("Solution to " + solution.problem.title, "problem",
+  Seq(routes.Assets.versioned("javascripts/solution.js").toString()), Seq()) {
+  <nav class="secondary-nav">
+    <ul>
+      <li><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
+      <li><a href="@routes.SolutionController.solutionListPage()">Solution List</a></li>
+      <li><a href="@routes.UserController.mySolutionListRedirect()">My Submissions</a></li>
+      <li><a href="@routes.UserController.getMySolvedProblemsPage()">My Solved Problems</a></li>
+    </ul>
+  </nav>
+
+  <h2>
+    <a href="@routes.UserController.profilePage(solution.user.name)">@solution.user.displayName</a>'s
+    Solution to
+    <a href="@routes.ProblemController.problemDetailPage(solution.problem.slug)">
+      Problem @solution.problem.slug. @solution.problem.title
+    </a>
+  </h2>
+
+  <h3>Solution Information</h3>
+
+  <table id="problem-solution-information" class="table border-table key-value-table">
+    <tr>
+      <td>Submit Time</td>
+      <td>@solution.submitTime</td>
+    </tr>
+    <tr>
+      <td>Author</td>
+      <td>@solution.user.displayName</td>
+    </tr>
+    <tr>
+      <td>Language</td>
+      <td>@solution.language</td>
+    </tr>
+    <tr>
+      <td>Result</td>
+      <td>@solution.result</td>
+    </tr>
+    <tr>
+      <td>Judge's Note</td>
+      <td class="content"><pre>@solution.judgeResponse</pre></td>
+    </tr>
+    <tr>
+      <td>Time Usage</td>
+      <td>@solution.timeUsed ms</td>
+    </tr>
+    <tr>
+      <td>Memory Usage</td>
+      <td>@solution.memoryUsed KiB</td>
+    </tr>
+    <tr>
+      <td>Judged by</td>
+      <td>@solution.judge.nickname</td>
+    </tr>
+  </table>
+
+  <div id="solution-detail">
+    <h3>Code</h3>
+      @if(solution.codeAccess(UserController.currentUser())) {
+        <div id="code">@solution.code</div>
+      } else {
+        @if(solution.isPrivate) {
+          <div id="no-code">
+            This solution was set to private by author @solution.user.displayName.
+          </div>
+        } else {
+          <div id="no-code">You must
+            <a href="@routes.ProblemController.problemDetailPage(solution.problem.slug)">
+              solved this problem
+            </a>
+            before viewing others' solutions.</div>
+        }
+      }
+  </div>
+
+  <h3>Discussion</h3>
+  <div>Discussion is not supported yet.</div>
+}
