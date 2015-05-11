@@ -8,7 +8,7 @@ before_install:
 - export SBT_OPTS="-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
 script:
 - ./activator dist
-- ./scripts_deploy/release.sh
+- ./scripts_deploy/release_prepare.sh
 cache:
   directories:
   - target

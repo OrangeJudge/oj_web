@@ -26,4 +26,6 @@ public class ProblemVote extends Model {
     public int difficulty;
 
     public Date createTime = new Date();
+
+    public static Finder<Long, ProblemVote> find = new Finder<>(Long.class, ProblemVote.class);
 }

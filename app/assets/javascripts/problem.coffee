@@ -136,10 +136,44 @@ getSolutionList = ->
       displayAllSolution(solutionList)
       setTimeout(getSolutionList, 3000)
 
+setupRating = ->
+  ratyConfig =
+    path: '/assets/images/raty'
+  popup = new $.Popup
+    content: $("#voting-box-template")
+    afterOpen: ->
+      $content = $(".popup_content")
+      $content.find(".quality-rating").raty(ratyConfig)
+      $content.find(".difficulty-rating").raty(ratyConfig)
+      $content.find(".submit-button").click ->
+        quality = $content.find(".quality-rating").raty('score')
+        difficulty = $content.find(".difficulty-rating").raty('score')
+        slug = $("#slug").val()
+        if ! quality or ! difficulty
+          alert "Please click the stars to vote."
+          return
+        postData =
+          quality: quality
+          difficulty: difficulty
+        # Submit Voting
+        $.ajax
+          url: "/asyn/problem/" + slug + "/vote"
+          type: "POST"
+          data: JSON.stringify(postData)
+          contentType: 'application/json'
+          success: (ret) ->
+            if ret.status
+              alert ret.message
+            else
+              popup.close()
+  popup.open()
+
 onPageLoad = ->
   setupCodeEditor()
   $("#submit-form").submit submitFormHandler
   $("#language").on "change", onLanguageChange
   getSolutionList()
+  if window.solvedByCurrentUser and ! window.votedByCurrentUser
+    setupRating()
 
 $(document).ready onPageLoad()

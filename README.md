@@ -22,7 +22,7 @@ Some of the functions may not be working yet. You are welcome to report any issu
 Please install or upgrade the the application using the following command.
 
 ```bash
-curl https://raw.githubusercontent.com/OrangeJudge/oj_web/master/scripts_deploy/install.sh | bash
+curl http://storage.googleapis.com/orange-judge-builds/install.sh | bash
 ```
 
 To run the application:

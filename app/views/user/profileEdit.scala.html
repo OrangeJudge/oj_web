@@ -1,4 +1,6 @@
-@layout("Edit Profile", "user", Seq(routes.Assets.versioned("javascripts/profileEdit.js").toString()), Seq()) {
+@layout("Edit Profile", "user", Seq(
+  routes.Assets.versioned("javascripts/dropzone.js").toString(),
+  routes.Assets.versioned("javascripts/profileEdit.js").toString()), Seq()) {
   <h2>Edit Profile</h2>
 
   <div id="edit-profile">
@@ -6,9 +8,9 @@
     <h3>Profile Image</h3>
     <form id="avatar-form" class="form">
       <div id="avatar-wrapper">
-        <img src="@routes.Assets.versioned("images/avatar.jpg")" alt="Avatar">
+        <img src="@routes.UserController.profileImage(user.name)" alt="Avatar">
       </div>
-      <a href="#" class="btn" id="upload-avatar">Upload new profile image</a>
+      <a href="javascript:" class="btn" id="upload-avatar">Upload new profile image</a>
     </form>
 
 

@@ -3,15 +3,21 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.User;
 import play.Logger;
+import play.mvc.Http;
 import play.mvc.Result;
 import utils.Authentication;
 
 import javax.persistence.PersistenceException;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class UserController extends OJController {
 
     public static Result userListPage() {
-        return ok("users");
+        List<User> users = User.find.all();
+        return ok(views.html.user.list.render(users));
     }
 
     public static Result registerPage() {
@@ -93,6 +99,19 @@ public class UserController extends OJController {
             return notFound("User Not Found.");
         }
         return ok(views.html.user.profile.render(user));
+    }
+
+    public static Result profileImage(String username) {
+        User user = User.find.where().eq("name", username).findUnique();
+        if (user == null) {
+            return notFound("User Not Found.");
+        }
+        Path path = user.getProfileImagePath();
+        if (Files.exists(path)) {
+            return ok(path.toFile());
+        } else {
+            return redirect(routes.Assets.versioned(new Assets.Asset("images/avatar.jpg")));
+        }
     }
 
     public static Result userProfile(String username) {
@@ -192,6 +211,28 @@ public class UserController extends OJController {
         }
         session("user", user.name);
         return formSubmitResponse(0, null, null);
+    }
+
+    @Authentication(json = true)
+    public static Result uploadProfileImage() {
+        Logger.info("Handle upload profile image.");
+        User user = (User) ctx().args.get("user");
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart uploadFile = body.getFile("file");
+        File file = uploadFile.getFile();
+        Logger.debug("File type: " + uploadFile.getContentType());
+        switch (uploadFile.getContentType()) {
+            case "image/jpeg":
+                break;
+            default:
+                return badRequest(jsonResponse(1, "Unsupported file format."));
+        }
+        try {
+            user.setProfileImage(file);
+        } catch (Exception e) {
+            return internalServerError(jsonResponse(2, e.toString()));
+        }
+        return ok(jsonResponse(0, null));
     }
 
     @Authentication(json = true)

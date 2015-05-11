@@ -9,7 +9,6 @@ GET           /about                                            controllers.Port
 GET           /terms                                            controllers.PortalController.terms()
 GET           /contactUs                                        controllers.PortalController.contactUs()
 
-# Account namespace require HTTPS.
 GET           /account/register                                 controllers.UserController.registerPage()
 GET           /account/login                                    controllers.UserController.loginPage()
 GET           /account/logout                                   controllers.UserController.logoutRedirect()
@@ -20,13 +19,16 @@ GET           /account/solutions                                controllers.User
 GET           /account/solved-problems                          controllers.UserController.getMySolvedProblemsPage()
 POST          /asyn/account/register                            controllers.UserController.register()
 POST          /asyn/account/login                               controllers.UserController.login()
+POST          /asyn/account/settings/profile-image              controllers.UserController.uploadProfileImage()
 POST          /asyn/account/settings/basic                      controllers.UserController.editBasicProfile()
 POST          /asyn/account/settings/password                   controllers.UserController.changePassword()
 POST          /asyn/account/email/verify-request                controllers.UserController.requestVerificationEmail()
 
+GET           /user/                                            controllers.UserController.userListPage()
 GET           /user/:username                                   controllers.UserController.profilePage(username: String)
 GET           /user/:username/solutions                         controllers.UserController.userSolutionListRedirect(username: String)
 GET           /user/:username/solved-problems                   controllers.UserController.getSolvedProblemsPage(username: String)
+GET           /user/:username/profile-image                     controllers.UserController.profileImage(username: String)
 GET           /asyn/user/:username/solved-problems              controllers.UserController.getSolvedProblems(username: String)
 GET           /asyn/user/:username                              controllers.UserController.userProfile(username: String)
 
@@ -35,6 +37,7 @@ GET           /problem/:slug                                    controllers.Prob
 GET           /problem/:id/assets/:filename                     controllers.ProblemController.assetFile(id: Long, filename: String)
 GET           /asyn/problem/:slug                               controllers.ProblemController.problemDetail(slug: String)
 POST          /asyn/problem/:slug/submit                        controllers.ProblemController.handleProblemSubmit(slug: String)
+POST          /asyn/problem/:slug/vote                          controllers.ProblemController.handleVoting(slug: String)
 
 GET           /solution/                                        controllers.SolutionController.solutionListPage()
 GET           /solution/:id                                     controllers.SolutionController.solutionPage(id: Long)

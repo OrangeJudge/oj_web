@@ -36,6 +36,14 @@ create table contest_participant (
   constraint pk_contest_participant primary key (id))
 ;
 
+create table contest_problem (
+  id                        bigint auto_increment not null,
+  contest_id                bigint,
+  problem_id                bigint,
+  slug                      varchar(255),
+  constraint pk_contest_problem primary key (id))
+;
+
 create table discussion (
   id                        bigint auto_increment not null,
   title                     varchar(255),
@@ -94,7 +102,6 @@ create table problem (
   create_time               datetime,
   last_modify_time          datetime,
   author_id                 bigint,
-  contest_id                bigint,
   show_in_problems          tinyint(1) default 0,
   constraint uq_problem_slug unique (slug),
   constraint pk_problem primary key (id))
@@ -195,50 +202,52 @@ alter table contest_participant add constraint fk_contest_participant_contest_5 
 create index ix_contest_participant_contest_5 on contest_participant (contest_id);
 alter table contest_participant add constraint fk_contest_participant_user_6 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_contest_participant_user_6 on contest_participant (user_id);
-alter table discussion add constraint fk_discussion_problem_7 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
-create index ix_discussion_problem_7 on discussion (problem_id);
-alter table discussion add constraint fk_discussion_solution_8 foreign key (solution_id) references solution (id) on delete restrict on update restrict;
-create index ix_discussion_solution_8 on discussion (solution_id);
-alter table discussion add constraint fk_discussion_contest_9 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
-create index ix_discussion_contest_9 on discussion (contest_id);
-alter table discussion add constraint fk_discussion_parent_10 foreign key (parent_id) references discussion (id) on delete restrict on update restrict;
-create index ix_discussion_parent_10 on discussion (parent_id);
-alter table discussion add constraint fk_discussion_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_discussion_user_11 on discussion (user_id);
-alter table discussion_follower add constraint fk_discussion_follower_discussion_12 foreign key (discussion_id) references discussion (id) on delete restrict on update restrict;
-create index ix_discussion_follower_discussion_12 on discussion_follower (discussion_id);
-alter table discussion_follower add constraint fk_discussion_follower_user_13 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_discussion_follower_user_13 on discussion_follower (user_id);
-alter table mail add constraint fk_mail_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_mail_user_14 on mail (user_id);
-alter table problem add constraint fk_problem_author_15 foreign key (author_id) references user (id) on delete restrict on update restrict;
-create index ix_problem_author_15 on problem (author_id);
-alter table problem add constraint fk_problem_contest_16 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
-create index ix_problem_contest_16 on problem (contest_id);
-alter table problem_follower add constraint fk_problem_follower_problem_17 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
-create index ix_problem_follower_problem_17 on problem_follower (problem_id);
-alter table problem_follower add constraint fk_problem_follower_user_18 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_problem_follower_user_18 on problem_follower (user_id);
-alter table problem_star add constraint fk_problem_star_problem_19 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
-create index ix_problem_star_problem_19 on problem_star (problem_id);
-alter table problem_star add constraint fk_problem_star_user_20 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_problem_star_user_20 on problem_star (user_id);
-alter table problem_vote add constraint fk_problem_vote_problem_21 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
-create index ix_problem_vote_problem_21 on problem_vote (problem_id);
-alter table problem_vote add constraint fk_problem_vote_user_22 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_problem_vote_user_22 on problem_vote (user_id);
-alter table solution add constraint fk_solution_user_23 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_solution_user_23 on solution (user_id);
-alter table solution add constraint fk_solution_contest_24 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
-create index ix_solution_contest_24 on solution (contest_id);
-alter table solution add constraint fk_solution_problem_25 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
-create index ix_solution_problem_25 on solution (problem_id);
-alter table solution add constraint fk_solution_judge_26 foreign key (judge_id) references judge (id) on delete restrict on update restrict;
-create index ix_solution_judge_26 on solution (judge_id);
-alter table user_relation add constraint fk_user_relation_follower_27 foreign key (follower_id) references user (id) on delete restrict on update restrict;
-create index ix_user_relation_follower_27 on user_relation (follower_id);
-alter table user_relation add constraint fk_user_relation_following_28 foreign key (following_id) references user (id) on delete restrict on update restrict;
-create index ix_user_relation_following_28 on user_relation (following_id);
+alter table contest_problem add constraint fk_contest_problem_contest_7 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
+create index ix_contest_problem_contest_7 on contest_problem (contest_id);
+alter table contest_problem add constraint fk_contest_problem_problem_8 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_contest_problem_problem_8 on contest_problem (problem_id);
+alter table discussion add constraint fk_discussion_problem_9 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_discussion_problem_9 on discussion (problem_id);
+alter table discussion add constraint fk_discussion_solution_10 foreign key (solution_id) references solution (id) on delete restrict on update restrict;
+create index ix_discussion_solution_10 on discussion (solution_id);
+alter table discussion add constraint fk_discussion_contest_11 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
+create index ix_discussion_contest_11 on discussion (contest_id);
+alter table discussion add constraint fk_discussion_parent_12 foreign key (parent_id) references discussion (id) on delete restrict on update restrict;
+create index ix_discussion_parent_12 on discussion (parent_id);
+alter table discussion add constraint fk_discussion_user_13 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_discussion_user_13 on discussion (user_id);
+alter table discussion_follower add constraint fk_discussion_follower_discussion_14 foreign key (discussion_id) references discussion (id) on delete restrict on update restrict;
+create index ix_discussion_follower_discussion_14 on discussion_follower (discussion_id);
+alter table discussion_follower add constraint fk_discussion_follower_user_15 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_discussion_follower_user_15 on discussion_follower (user_id);
+alter table mail add constraint fk_mail_user_16 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_mail_user_16 on mail (user_id);
+alter table problem add constraint fk_problem_author_17 foreign key (author_id) references user (id) on delete restrict on update restrict;
+create index ix_problem_author_17 on problem (author_id);
+alter table problem_follower add constraint fk_problem_follower_problem_18 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_problem_follower_problem_18 on problem_follower (problem_id);
+alter table problem_follower add constraint fk_problem_follower_user_19 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_problem_follower_user_19 on problem_follower (user_id);
+alter table problem_star add constraint fk_problem_star_problem_20 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_problem_star_problem_20 on problem_star (problem_id);
+alter table problem_star add constraint fk_problem_star_user_21 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_problem_star_user_21 on problem_star (user_id);
+alter table problem_vote add constraint fk_problem_vote_problem_22 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_problem_vote_problem_22 on problem_vote (problem_id);
+alter table problem_vote add constraint fk_problem_vote_user_23 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_problem_vote_user_23 on problem_vote (user_id);
+alter table solution add constraint fk_solution_user_24 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_solution_user_24 on solution (user_id);
+alter table solution add constraint fk_solution_contest_25 foreign key (contest_id) references contest (id) on delete restrict on update restrict;
+create index ix_solution_contest_25 on solution (contest_id);
+alter table solution add constraint fk_solution_problem_26 foreign key (problem_id) references problem (id) on delete restrict on update restrict;
+create index ix_solution_problem_26 on solution (problem_id);
+alter table solution add constraint fk_solution_judge_27 foreign key (judge_id) references judge (id) on delete restrict on update restrict;
+create index ix_solution_judge_27 on solution (judge_id);
+alter table user_relation add constraint fk_user_relation_follower_28 foreign key (follower_id) references user (id) on delete restrict on update restrict;
+create index ix_user_relation_follower_28 on user_relation (follower_id);
+alter table user_relation add constraint fk_user_relation_following_29 foreign key (following_id) references user (id) on delete restrict on update restrict;
+create index ix_user_relation_following_29 on user_relation (following_id);
 
 
 
@@ -255,6 +264,8 @@ drop table activity;
 drop table contest;
 
 drop table contest_participant;
+
+drop table contest_problem;
 
 drop table discussion;
 

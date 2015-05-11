@@ -1,7 +1,12 @@
-@(problem: Problem)
+@(problem: Problem, solvedByCurrentUser: Boolean, votedByCurrentUser: Boolean)
 
 @layout(problem.slug + ". " + problem.title + " - Problem", "problem",
   Seq(routes.Assets.versioned("javascripts/problem.js").toString()), Seq()) {
+  <script type="text/javascript">
+    window.solvedByCurrentUser = @solvedByCurrentUser;
+    window.votedByCurrentUser = @votedByCurrentUser;
+  </script>
+
   <nav class="secondary-nav">
     <ul>
       <li><a href="@routes.ProblemController.problemListPage()">Problem List</a></li>
@@ -14,11 +19,31 @@
   <h2>@problem.slug. @problem.title</h2>
 
   <div id="problem-detail">
-
-    <div class="description">
-      <h3>Description</h3>
-      <div class="content">
-        @Html(problem.getDescriptionHTML)
+    <div class="row">
+      <div class="col col-70">
+        <div class="description">
+          <h3>Description</h3>
+          <div class="content">
+          @Html(problem.getDescriptionHTML)
+          </div>
+        </div>
+      </div>
+      <div class="col col-30">
+        <div class="row">
+          <div class="panel">
+            <div class="heading">Rating</div>
+            <div class="body">
+              <p>Quality</p>
+              <p>Difficulty</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="panel">
+            <div class="heading">Limit</div>
+            <div class="body"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,5 +141,23 @@
         <div class="submitTime col-30"></div>
       </div>
     </li>
+  </div>
+
+  <div id="voting-box-template" class="hidden">
+    <div class="problem-voting-box">
+      <h3>Rating</h3>
+      <div class="content"><p>Congratulation! Your solution to this problem has been accepted! Please help rate this problem.</p></div>
+      <div class="row">
+        <div class="col col-40">Quality</div>
+        <div class="col col-60"><div class="quality-rating"></div></div>
+      </div>
+      <div class="row">
+        <div class="col col-40">Difficulty</div>
+        <div class="col col-60"><div class="difficulty-rating"></div></div>
+      </div>
+      <div>
+        <a href="javascript:" class="btn submit-button">Submit</a>
+      </div>
+    </div>
   </div>
 }

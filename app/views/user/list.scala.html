@@ -1,0 +1,24 @@
+@(users: java.util.List[User])
+@layout("Users", "user", Seq(routes.Assets.versioned("javascripts/userList.js").toString()), Seq()) {
+  <nav class="secondary-nav">
+    <ul>
+      <li class="active"><a href="@routes.UserController.userListPage()?sort=top">Top Solvers</a></li>
+      <li><a href="@routes.UserController.userListPage()?sort=new">New Users</a></li>
+    </ul>
+  </nav>
+
+  <div id="user-list">
+    @for(user <- users) {
+      <div class="user-sticker">
+        <a href="@routes.UserController.profilePage(user.name)">
+          <div class="avatar">
+            <img id="avatar" src="@routes.UserController.profileImage(user.name)" alt="@user.displayName">
+          </div>
+          <div class="username">@user.name</div>
+          <div class="display-name">@user.displayName</div>
+          <div class="extra">Solved @user.getSolvedProblems.size() problems</div>
+        </a>
+      </div>
+    }
+  </div>
+}

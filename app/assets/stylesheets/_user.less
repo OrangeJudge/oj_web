@@ -1,0 +1,42 @@
+#user-list {
+  font-size: 0;
+  .user-sticker {
+    font-size: 13px;
+    width: 25%;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    line-height: 16px;
+    a {
+      display: block;
+      padding: 5px;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: #555555;
+      &:hover {
+        background: #FFFFDB;
+      }
+    }
+    div {
+      margin-left: 60px;
+    }
+    .avatar {
+      margin-left: 0;
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 3px;
+      overflow: hidden;
+      img {
+        width: 48px;
+        height: 48px;
+      }
+    }
+    .username {
+      color: @theme;
+    }
+    .extra {
+      color: #AAAAAA;
+    }
+  }
+}

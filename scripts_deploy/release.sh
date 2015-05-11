@@ -1,19 +1,8 @@
 #!/usr/bin/env bash
 
-# This script is for releasing the Orange Judge web application.
-# Currently it is used by Travis-CI.
-# Files in target/release will be uploaded into a Google Cloud Storage after each compilation of master branch.
+./activator dist
 
-if [ -d "target/release" ]; then
-    echo "Release directory exists, delete it."
-    rm -rf target/release
-fi
+sh scripts_deploy/release_prepare.sh
 
-mkdir target/release
+sh scripts_deploy/release_gcs.sh
 
-echo "Copy the packed file to release directory."
-
-cp target/universal/*.zip target/release
-cp target/release/*.zip target/release/oj_web-LASTEST.zip
-
-echo "Release process finished."

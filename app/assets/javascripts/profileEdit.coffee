@@ -40,6 +40,27 @@ $(document).ready ->
   if window.userCountry && window.userCountry.length > 0
     $country.val window.userCountry
 
+  # Setup Avatar Dropzone
+  dropzoneConfig =
+    url: "/asyn/account/settings/profile-image"
+    maxFiles: 1
+    previewsContainer: false
+    init: ->
+      # A hack to disable multiple
+      this.hiddenFileInput.removeAttribute('multiple')
+  avatarDropzone = new Dropzone("#upload-avatar", dropzoneConfig)
+  avatarDropzone.on 'complete', (file) ->
+    console.log file
+    if file.status == 'error'
+      avatarDropzone.removeAllFiles()
+      if file.xhr and file.xhr.response
+        response = JSON.parse(file.xhr.response.toString())
+        alert response.message
+      else
+        alert "Error!"
+    else
+      window.location.reload()
+
   # Basic form
   $basicForm.find("input, select").on "change keypress", ->
     enableButton $submitBasicForm

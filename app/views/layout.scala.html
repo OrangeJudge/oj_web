@@ -23,6 +23,7 @@
     <link href="@routes.Assets.versioned("stylesheets/font-awesome.min.css")" rel="stylesheet">
     <link href="@routes.Assets.versioned("stylesheets/toastr.min.css")" rel="stylesheet">
     <link href="@routes.Assets.versioned("stylesheets/popup.css")" rel="stylesheet">
+    <link href="@routes.Assets.versioned("stylesheets/jquery.raty.css")" rel="stylesheet">
     @if(UserController.currentUser() != null && UserController.currentUser().gender) {
     <link href="@routes.Assets.versioned("stylesheets/portal-pink.css")" rel="stylesheet">
     } else {
@@ -69,7 +70,7 @@
                 <a href="@routes.ContestController.contestListPage()">Contests</a>
               </li>
               <li @if(topNavActive == "user") {class="active"}>
-                <a href="@routes.ContestController.contestListPage()">Users</a>
+                <a href="@routes.UserController.userListPage()">Users</a>
               </li>
             </ul>
           </nav>
@@ -89,6 +90,10 @@
                   <i class="fa fa-list-alt"></i> Profile</a></li>
                 <li><a href="@routes.UserController.editProfilePage()">
                   <i class="fa fa-cog"></i> Settings</a></li>
+                @if(UserController.currentUser().adminLevel > 0) {
+                  <li><a href="@routes.AdminController.adminHomePage()">
+                    <i class="fa fa-lock"></i> Admin</a></li>
+                }
                 <li><a href="@routes.UserController.logoutRedirect()">
                   <i class="fa fa-sign-out"></i> Logout</a></li>
               }else{
@@ -115,7 +120,6 @@
             <span>&copy; OrangeJuice 2015</span>
             <a href="@routes.PortalController.about()">About Us</a>
             <a href="@routes.PortalController.terms()">Terms and Conditions</a>
-            <a href="@routes.AdminController.adminHomePage()">Admin Login</a>
           </div>
           <div id="version">
             Powered with &#9829; by
@@ -131,6 +135,7 @@
     <script src="@routes.Assets.versioned("javascripts/jquery.popup.min.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/moment.min.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/toastr.min.js")"></script>
+    <script src="@routes.Assets.versioned("javascripts/jquery.raty.js")"></script>
     <script data-ace-base="/assets/javascripts/ace/" src="@routes.Assets.versioned("javascripts/ace/ace.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/country.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/common.js")"></script>

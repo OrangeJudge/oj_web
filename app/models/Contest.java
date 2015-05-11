@@ -22,7 +22,7 @@ public class Contest extends Model {
     @OneToMany(mappedBy = "contest")
     public List<ContestParticipant> participants;
     @OneToMany(mappedBy = "contest")
-    public List<Problem> problems;
+    public List<ContestProblem> problems;
     @OneToMany(mappedBy = "contest")
     public List<Solution> solutions;
 

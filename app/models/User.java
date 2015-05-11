@@ -8,10 +8,15 @@ import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import play.cache.Cache;
 import play.twirl.api.Html;
+import utils.FileUtil;
 import utils.Mailer;
 import utils.StringHashing;
 import views.html.email.verifyEmail;
@@ -179,5 +184,30 @@ public class User extends Model {
         lastVerificationEmailSent = new Date();
         Html content = verifyEmail.render(this);
         Mailer.sendMail(this, "Verify Your Email Address on OrangeJudge.com", content.toString());
+    }
+
+    public void setProfileImage(File file) throws Exception {
+        Logger.info("Try to set profile image from file " + file.getAbsolutePath() + ".");
+        Path uploadPath = Paths.get("upload/avatar");
+        if (!Files.exists(uploadPath)) {
+            FileUtil.createPath(uploadPath);
+        }
+        Path target = getProfileImagePath();
+        if (Files.exists(target)) {
+            Files.delete(target);
+        }
+        boolean renameSuccess = file.renameTo(target.toFile());
+        if (!renameSuccess) {
+            throw new Exception("Unable to rename profile image.");
+        }
+    }
+
+    /**
+     * Get the path of profile image.
+     * @return Path to the user's profile image
+     */
+    @JsonIgnore
+    public Path getProfileImagePath() {
+        return Paths.get("upload/avatar/" + id + ".jpg");
     }
 }

@@ -49,8 +49,8 @@ public class Problem extends Model {
     @ManyToOne
     public User author;
 
-    @ManyToOne
-    public Contest contest;
+    @OneToMany(mappedBy = "problem")
+    public List<ContestProblem> contests;
     public boolean showInProblems = true;
 
     @JsonIgnore
