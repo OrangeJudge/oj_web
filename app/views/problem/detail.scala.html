@@ -33,8 +33,14 @@
           <div class="panel">
             <div class="heading">Rating</div>
             <div class="body">
-              <p>Quality</p>
-              <p>Difficulty</p>
+              <div class="row">
+                <div class="col col-40">Quality</div>
+                <div class="col col-60">@problem.getQualityRating</div>
+              </div>
+              <div class="row">
+                <div class="col col-40">Difficulty</div>
+                <div class="col col-60">@problem.getDifficultyRating</div>
+              </div>
             </div>
           </div>
         </div>

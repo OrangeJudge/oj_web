@@ -84,6 +84,14 @@ public class Problem extends Model {
         return html;
     }
 
+    public double getQualityRating() {
+        return 0;
+    }
+
+    public double getDifficultyRating() {
+        return 0;
+    }
+
     public boolean isSolvedBy(User user) {
         // TODO: this step must be optimized.
         for (Solution solution : solutions) {

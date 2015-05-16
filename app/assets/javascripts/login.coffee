@@ -29,7 +29,7 @@ $(document).ready ->
 
     # submit the data
     $.ajax
-      "url": "/asyn/account/login"
+      "url": "/asyn/v1/account/login"
       "type": "post"
       "contentType": 'application/json'
       "data": JSON.stringify(data)

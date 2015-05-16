@@ -42,9 +42,10 @@ $(document).ready ->
 
   # Setup Avatar Dropzone
   dropzoneConfig =
-    url: "/asyn/account/settings/profile-image"
+    url: "/asyn/v1/account/settings/profile-image"
     maxFiles: 1
     previewsContainer: false
+    acceptedFiles: ".jpg,.png"
     init: ->
       # A hack to disable multiple
       this.hiddenFileInput.removeAttribute('multiple')
@@ -57,7 +58,7 @@ $(document).ready ->
         response = JSON.parse(file.xhr.response.toString())
         alert response.message
       else
-        alert "Error!"
+        alert "Sorry, this file is not supported."
     else
       window.location.reload()
 
@@ -75,7 +76,7 @@ $(document).ready ->
       "gender": $gender.val() == "1"
     }
     $.ajax
-      url: "/asyn/account/settings/basic"
+      url: "/asyn/v1/account/settings/basic"
       type: "post"
       contentType: 'application/json'
       data: JSON.stringify(data)
@@ -105,7 +106,7 @@ $(document).ready ->
       password: $password.val()
       passwordOld: $passwordOld.val()
     $.ajax
-      url: "/asyn/account/settings/password"
+      url: "/asyn/v1/account/settings/password"
       type: "post"
       contentType: 'application/json'
       data: JSON.stringify(data)
@@ -119,7 +120,7 @@ $(document).ready ->
     return false
 
 window.resendVerification = ->
-  $.post "/asyn/account/email/verify-request", (ret) ->
+  $.post "/asyn/v1/account/email/verify-request", (ret) ->
     if ret['status']
       toastr.error ret['message']
     else

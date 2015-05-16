@@ -25,7 +25,7 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
 
-doc in Compile <<= target.map(_ / "none")
+sources in (Compile, doc) ~= (_ filter (_.getName endsWith ".java"))  // Force generating JavaDoc instead of ScalaDoc
 
 mappings in Universal ++=
   (baseDirectory.value / "scripts" * "*" get) map

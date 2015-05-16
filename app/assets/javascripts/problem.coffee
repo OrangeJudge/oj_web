@@ -61,7 +61,7 @@ submitFormHandler = ->
     language: language_code
     code: code
   $.ajax
-    url: "/asyn/problem/" + slug + "/submit"
+    url: "/asyn/v1/problem/" + slug + "/submit"
     type: "POST"
     data: JSON.stringify(submit_package)
     contentType: 'application/json'
@@ -125,12 +125,12 @@ displayAllSolution = (solutionList) ->
 getSolutionList = ->
   slug = $("#slug").val()
   $.ajax
-    url: "/asyn/solution/recent?problem=" + slug + "&user=" + window.username + "&pageSize=5"
+    url: "/asyn/v1/solution/recent?problem=" + slug + "&user=" + window.username + "&pageSize=5"
     success: (ret) ->
       solutionList = ret['data']
       displayMySolution(solutionList)
   $.ajax
-    url: "/asyn/solution/recent?problem=" + slug + "&result=200&pageSize=5"
+    url: "/asyn/v1/solution/recent?problem=" + slug + "&result=200&pageSize=5"
     success: (ret) ->
       solutionList = ret['data']
       displayAllSolution(solutionList)
@@ -157,7 +157,7 @@ setupRating = ->
           difficulty: difficulty
         # Submit Voting
         $.ajax
-          url: "/asyn/problem/" + slug + "/vote"
+          url: "/asyn/v1/problem/" + slug + "/vote"
           type: "POST"
           data: JSON.stringify(postData)
           contentType: 'application/json'

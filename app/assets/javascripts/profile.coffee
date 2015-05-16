@@ -20,7 +20,7 @@ displaySolvedProblems = (problemList) ->
 
 getSolvedProblems = ->
   $.ajax
-    url: "/asyn/user/" + window.profileUserName + "/solved-problems"
+    url: "/asyn/v1/user/" + window.profileUserName + "/solved-problems"
     success: (ret) ->
       if ret.status == 0
         displaySolvedProblems(ret.data)

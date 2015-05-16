@@ -72,7 +72,7 @@ $(document).ready ->
 
     # submit the data
     $.ajax
-      "url": "/asyn/account/register"
+      "url": "/asyn/v1/account/register"
       "type": "post"
       "contentType": 'application/json'
       "data": JSON.stringify(data)
@@ -84,7 +84,7 @@ $(document).ready ->
             "password": $password.val()
           }
           $.ajax
-            "url": "/asyn/account/login"
+            "url": "/asyn/v1/account/login"
             "type": "post"
             "contentType": 'application/json'
             "data": JSON.stringify(loginDate)

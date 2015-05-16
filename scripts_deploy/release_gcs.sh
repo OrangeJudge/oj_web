@@ -2,6 +2,6 @@
 
 echo "Preparing release to GCS."
 
-gsutil cp target/release/* gs://orange-judge-builds
+gsutil cp -r target/release/* gs://orange-judge-builds
 
 echo "Released to GCS."

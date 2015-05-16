@@ -40,7 +40,7 @@ updateJudgeStatus = ->
   if query.length > 0
     query = "?" + query
   $.ajax
-    url: "/asyn/solution/recent" + query
+    url: "/asyn/v1/solution/recent" + query
     success: (ret) ->
       if ! ret["status"]
         displayJudgeStatus(ret["data"])

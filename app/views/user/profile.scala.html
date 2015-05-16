@@ -10,10 +10,12 @@
         <div id="avatar-box">
           @if(isCurrentUser) {
             <a href="@routes.UserController.editProfilePage()">
-              <img id="avatar" src="@routes.UserController.profileImage(user.name)" alt="@user.displayName">
+              <img id="avatar" src="@routes.UserController.profileImage(user.name)?x=225&amp;y=225" alt="@user.displayName">
             </a>
           } else {
-            <img id="avatar" src="@routes.UserController.profileImage(user.name)" alt="@user.displayName">
+            <a href="@routes.UserController.profileImage(user.name)?x=480&amp;y=480">
+              <img id="avatar" src="@routes.UserController.profileImage(user.name)?x=225&amp;y=225" alt="@user.displayName">
+            </a>
           }
         </div>
         <h2>

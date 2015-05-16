@@ -4,22 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import controllers.routes;
 import play.Logger;
 import play.Play;
+import play.cache.Cache;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
-
-import javax.persistence.*;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-
-import play.cache.Cache;
 import play.twirl.api.Html;
 import utils.FileUtil;
+import utils.ImageUtil;
 import utils.Mailer;
 import utils.StringHashing;
 import views.html.email.verifyEmail;
+
+import javax.persistence.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class User extends Model {
@@ -202,6 +206,12 @@ public class User extends Model {
         }
     }
 
+    public void setProfileImage(byte[] byteArray) throws Exception {
+        Path temp = Files.createTempFile("avatar", ".jpg");
+        Files.write(temp, byteArray);
+        setProfileImage(temp.toFile());
+    }
+
     /**
      * Get the path of profile image.
      * @return Path to the user's profile image
@@ -209,5 +219,17 @@ public class User extends Model {
     @JsonIgnore
     public Path getProfileImagePath() {
         return Paths.get("upload/avatar/" + id + ".jpg");
+    }
+
+    /**
+     * Get the byte array of user's resized profile image.
+     * @param width Output width.
+     * @param height Output height.
+     * @return Byte array of an image.
+     * @throws IOException If the user does not upload a profile image, throws IO Exception.
+     */
+    @JsonIgnore
+    public byte[] getProfileImage(int width, int height) throws IOException {
+        return ImageUtil.resize(getProfileImagePath().toFile(), width, height);
     }
 }

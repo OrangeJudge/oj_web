@@ -6,11 +6,11 @@ import play.Logger;
 import play.mvc.Http;
 import play.mvc.Result;
 import utils.Authentication;
+import utils.ImageUtil;
 
 import javax.persistence.PersistenceException;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.util.List;
 
 public class UserController extends OJController {
@@ -102,14 +102,25 @@ public class UserController extends OJController {
     }
 
     public static Result profileImage(String username) {
+        int maxWidth = 96;
+        int maxHeight = 96;
+        try {
+            if (request().queryString().containsKey("x")) {
+                maxWidth = Integer.parseInt(request().queryString().get("x")[0]);
+            }
+            if (request().queryString().containsKey("y")) {
+                maxHeight = Integer.parseInt(request().queryString().get("y")[0]);
+            }
+        } catch (Exception e) {
+            return badRequest(jsonResponse(2, "Invalid request parameters: " + e.toString()));
+        }
         User user = User.find.where().eq("name", username).findUnique();
         if (user == null) {
-            return notFound("User Not Found.");
+            return notFound(jsonResponse(1, "User Not Found."));
         }
-        Path path = user.getProfileImagePath();
-        if (Files.exists(path)) {
-            return ok(path.toFile());
-        } else {
+        try {
+            return ok(user.getProfileImage(maxWidth, maxHeight)).as("image/jpg");
+        } catch (IOException e) {
             return redirect(routes.Assets.versioned(new Assets.Asset("images/avatar.jpg")));
         }
     }
@@ -221,14 +232,18 @@ public class UserController extends OJController {
         Http.MultipartFormData.FilePart uploadFile = body.getFile("file");
         File file = uploadFile.getFile();
         Logger.debug("File type: " + uploadFile.getContentType());
-        switch (uploadFile.getContentType()) {
-            case "image/jpeg":
-                break;
-            default:
-                return badRequest(jsonResponse(1, "Unsupported file format."));
-        }
         try {
-            user.setProfileImage(file);
+            switch (uploadFile.getContentType()) {
+                case "image/jpeg":
+                    user.setProfileImage(file);
+                    break;
+                case "image/png":
+                    byte[] converted = ImageUtil.convert(file, "jpg");
+                    user.setProfileImage(converted);
+                    break;
+                default:
+                    return badRequest(jsonResponse(1, "Unsupported file format."));
+            }
         } catch (Exception e) {
             return internalServerError(jsonResponse(2, e.toString()));
         }

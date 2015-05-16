@@ -8,11 +8,12 @@
     <h3>Profile Image</h3>
     <form id="avatar-form" class="form">
       <div id="avatar-wrapper">
-        <img src="@routes.UserController.profileImage(user.name)" alt="Avatar">
+        <a href="@routes.UserController.profileImage(user.name)?x=480&amp;y=480">
+          <img src="@routes.UserController.profileImage(user.name)?x=160&amp;y=160" alt="Avatar">
+        </a>
       </div>
       <a href="javascript:" class="btn" id="upload-avatar">Upload new profile image</a>
     </form>
-
 
     <h3>Basic Information</h3>
     <form id="basic-form" class="form">

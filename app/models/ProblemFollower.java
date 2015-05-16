@@ -1,12 +1,14 @@
 package models;
 
+import play.db.ebean.Model;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
-public class ProblemFollower {
+public class ProblemFollower extends Model {
     @Id
     public Long id;
 

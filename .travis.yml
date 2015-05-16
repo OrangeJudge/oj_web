@@ -7,7 +7,7 @@ before_install:
 - unset SBT_OPTS JVM_OPTS
 - export SBT_OPTS="-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
 script:
-- ./activator dist
+- sbt dist
 - ./scripts_deploy/release_prepare.sh
 cache:
   directories:

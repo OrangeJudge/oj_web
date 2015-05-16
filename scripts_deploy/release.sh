@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-./activator dist
+sbt dist
 
 sh scripts_deploy/release_prepare.sh
 
