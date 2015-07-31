@@ -176,4 +176,5 @@ onPageLoad = ->
   if window.solvedByCurrentUser and ! window.votedByCurrentUser
     setupRating()
 
+
 $(document).ready onPageLoad()

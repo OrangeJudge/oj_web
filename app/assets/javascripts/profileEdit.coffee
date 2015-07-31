@@ -1,9 +1,3 @@
-enableButton = ($button) ->
-  $button.removeAttr("disabled")
-
-disableButton = ($button) ->
-  $button.attr("disabled", "disabled")
-
 $(document).ready ->
   # get HTML elements
   $form = $(".form")
@@ -120,8 +114,11 @@ $(document).ready ->
     return false
 
 window.resendVerification = ->
-  $.post "/asyn/v1/account/email/verify-request", (ret) ->
-    if ret['status']
-      toastr.error ret['message']
-    else
-      toastr.success 'A verification email is sent.'
+  $.ajax
+    url: "/asyn/v1/account/email/verify-request"
+    type: 'post'
+    success: (ret) ->
+      if ret['status']
+        toastr.error ret['message']
+      else
+        toastr.success 'A verification email is sent.'

@@ -1,5 +1,61 @@
 @(contests: java.util.List[Contest])
 
-@admin.frame("Contest List", "contest", Seq(), Seq()) {
-  <h2>Contest List</h2>
+@admin.frame("Contest List", "contest", Seq(
+  routes.Assets.versioned("javascripts/admin/contestList.js").toString()
+), Seq()) {
+  <div id="problem-list-header" class="row">
+    <div class="col">
+      <h2>Contest List</h2>
+    </div>
+    <div class="col">
+      <a id="add-contest" href="javascript:" class="btn">Add a Contest</a>
+    </div>
+  </div>
+
+  <div id="add-contest-zone" class="row hidden">
+    <div class="col col-50">
+      <div class="panel">
+        <div class="heading">Add a Contest
+          <div class="pull-right"><a href="javascript:" onclick="closeAddProblem()">Cancel</a></div>
+        </div>
+        <div class="body">
+          <form class="form">
+            <label for="slug">Contest Title</label>
+            <input class="input" id="title" required>
+            <div class="button-group">
+              <input class="theme" type="submit" value="Create" id="submit">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="problem-list table-list">
+      <div class="item header">
+        <div class="id">#</div>
+        <div class="title col-40">Title</div>
+        <div class="status">Status</div>
+        <div class="edit">Edit</div>
+        <div class="view">View</div>
+      </div>
+      <ul>
+      @for(contest <- contests) {
+        <li>
+          <div class="item">
+            <div class="id">@contest.id</div>
+            <div class="title col-40">@contest.title</div>
+            <div class="status">@contest.status</div>
+            <div class="edit">
+              <a href="@routes.AdminController.contestEditPage(contest.id)">Edit</a>
+            </div>
+            <div class="view">View</div>
+          </div>
+        </li>
+      }
+      </ul>
+    </div>
+  </div>
 }

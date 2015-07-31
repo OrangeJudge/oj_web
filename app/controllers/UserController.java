@@ -28,6 +28,10 @@ public class UserController extends OJController {
         return ok(views.html.user.login.render());
     }
 
+    public static Result forgetPasswordPage() {
+        return ok(views.html.user.forgetPassword.render());
+    }
+
     public static Result logoutRedirect() {
         session().remove("user");
         return redirect(routes.UserController.loginPage());
@@ -54,12 +58,31 @@ public class UserController extends OJController {
         }
     }
 
+    public static Result resetPassWordPage(String username, String token) {
+        User user = User.find.where().eq("name", username).findUnique();
+        if (user == null) {
+            String message = "The account \"" + username + "\" you want to reset password for " +
+                    "is not found on our system. ";
+            return badRequest(views.html.info.message.render("Account Not Found", message));
+        }
+        if (user.getResetPasswordToken() != null && user.getResetPasswordToken().equals(token)) {
+            return ok(views.html.user.resetPassword.render(user));
+        } else {
+            String message = "Sorry. You can not create password for \"" + username + "\". "
+                    + " The token is not valid. <br />"
+                    + " You may request anther reset password request.";
+            return badRequest(views.html.info.message.render("Invalid Reset Password Request", message));
+        }
+    }
+
     public static User currentUser() {
         User user = (User) ctx().args.get("user");
         if (user == null) {
             Logger.info("User not exist in context. Try to read from session.");
             user = User.find.where().eq("name", session("user")).findUnique();
-            ctx().args.put("user", user);
+            if (user != null) {
+                ctx().args.put("user", user);
+            }
         }
         return user;
     }
@@ -186,13 +209,14 @@ public class UserController extends OJController {
             String password = in.get("password").textValue();
             user.setPassword(password);
             user.save();
-            user.refresh();  // The date in Java and MySQL has different precisions
             user.sendVerifyEmail();
         } catch (PersistenceException e) {
             // Database change after checking.
             return formSubmitResponse(1, null, "Server encountered a problem, please try again.");
         } catch (NullPointerException npe) {
             return formSubmitResponse(2, null, "Please check your input.");
+        } catch (Exception e) {
+            return formSubmitResponse(3, null, e.toString());
         }
         return formSubmitResponse(0, null, null);
     }
@@ -278,6 +302,8 @@ public class UserController extends OJController {
             user.save();
         } catch (NullPointerException npe) {
             return formSubmitResponse(3, null, "Invalid input data.");
+        } catch (Exception e) {
+            return formSubmitResponse(4, null, e.toString());
         }
         return formSubmitResponse(0, null, null);
     }
@@ -300,10 +326,53 @@ public class UserController extends OJController {
         return formSubmitResponse(0, null, null);
     }
 
+    public static Result resetPassword() {
+        JsonNode in = request().body().asJson();
+        if (in == null) {
+            return formSubmitResponse(1, null, "Expecting Json data.");
+        }
+        User user = User.find.where().eq("name", in.get("username").asText()).findUnique();
+        if (user == null) {
+            return formSubmitResponse(4, null, "User not found");
+        }
+        if (!user.getResetPasswordToken().equals(in.get("token").asText())) {
+            return formSubmitResponse(2, null, "Incorrect token.");
+        }
+        // TODO: Check if password is valid.
+        user.setPassword(in.get("password").asText());
+        user.resetPasswordRequestedTime = null;
+        user.save();
+        return formSubmitResponse(0, null, null);
+    }
+
     @Authentication(json = true)
     public static Result requestVerificationEmail() {
         User user = (User) ctx().args.get("user");
-        user.sendVerifyEmail();
+        try {
+            user.sendVerifyEmail();
+        } catch (Exception e) {
+            return ok(jsonResponse(1, e.getMessage()));
+        }
         return ok(jsonResponse(0, null));
     }
+
+    public static Result requestResetPassword() {
+        JsonNode in = request().body().asJson();
+        String email = in.get("email").asText();
+        if (email == null) {
+            return badRequest(jsonResponse(2, "Please provide an valid email address."));
+        }
+        User user = User.find.where().eq("email", email).findUnique();
+        if (user == null) {
+            return ok(jsonResponse(3, "User not found with email address " + email + "."));
+        }
+        try {
+            user.sendResetPasswordEmail();
+        } catch (Exception e) {
+            return ok(jsonResponse(1, e.getMessage()));
+        }
+        return ok(jsonResponse(0, null));
+    }
+
+
 }

@@ -1,58 +1,31 @@
 @(user: User)
-<!DOCTYPE html>
-<html>
-  <head lang="en">
-    <meta charset="UTF-8">
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        background: #FCFCFC;
-      }
-      * {
-        font-family: Helvetica, Arial, Sans-serif, serif;
-      }
-      h1 {
-        font-size: 20px;
-        text-align: center;
-        background: #F15A23;
-        color: #FFFFFF;
-        padding: 5px;
-        font-weight: normal;
-      }
-      p {
-        font-size: 15px;
-        color: #555555;
-        margin: 10px 20px;
-      }
-      a {
-        color: #F15A23
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Orange Judge</h1>
-    <p>Hi @user.displayName,</p>
-    <p>Thank you for registering at <a href="@OJController.getSiteUrl">@OJController.getSiteName</a>.</p>
-    <p>
-      For security reasons, we need to verify your email address.
-      Please confirm your ownership of this email account (@user.email) by clicking the link below, or
-      open it in a new browser page.
-    </p>
-    <p>
-      <a href="@user.getVerificationLink">@user.getVerificationLink</a>
-    </p>
-    <p>
-      Please note that you must verify your email address <strong>within 24 hours</strong>, otherwise you need to
-      create a new account again.
-    </p>
-    <p>
-      If you did not create any account at @OJController.getSiteName with this email address, please ignore this email.
-      Or you could <a href="@OJController.getSiteUrl@routes.PortalController.contactUs()">report to us</a> for the spam.
-    </p>
-    <p>
-      Happy coding!
-    </p>
-    <p>The @OJController.getSiteName Team</p>
-  </body>
-</html>
+@email.template {
+  <p>Hi @user.displayName,</p>
+  <p>Thank you for registering at
+    <a href="@OJController.getSiteUrl" style="color: #F15A23;">@OJController.getSiteName</a>.
+  </p>
+  <p>
+    For security reasons, we need to verify your email address.
+    Please confirm your ownership of this email account (@user.email) by clicking the link below, or
+    open it in a new browser page.
+  </p>
+  <p>
+    <a href="@user.getVerificationLink" style="color: #F15A23;">@user.getVerificationLink</a>
+  </p>
+  <p>
+    Please note that you must verify your email address <strong>within 24 hours</strong>, otherwise you need to
+    create a new account again.
+  </p>
+  <p>
+    If you did not create any account at @OJController.getSiteName with this email address, please ignore this email.
+    Or you could
+    <a href="@OJController.getSiteUrl@routes.PortalController.contactUs()" style="color: #F15A23;">
+      report to us
+    </a>
+    for the spam.
+  </p>
+  <p>
+    Happy coding!
+  </p>
+  <p>The @OJController.getSiteName Team</p>
+}

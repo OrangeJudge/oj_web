@@ -30,7 +30,7 @@ public class ProblemController extends OJController {
         boolean solvedByCurrentUser = false;
         boolean votedByCurrentUser = false;
         User user = UserController.currentUser();
-        if (problem.isSolvedBy(user)) {
+        if (user != null && problem.isSolvedBy(user)) {
             solvedByCurrentUser = true;
             ProblemVote vote = ProblemVote.find.where().eq("problem", problem).eq("user", user).findUnique();
             if (vote != null) {

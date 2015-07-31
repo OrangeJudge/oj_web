@@ -19,8 +19,8 @@
   <div class="problem-list">
     <div class="item header">
       <div class="id">#</div>
+      <div class="quality">Quality</div>
       <div class="title">Title</div>
-      <div class="rating">Rating</div>
       <div class="solved"># Solved</div>
       <div class="difficulty">Difficulty</div>
     </div>
@@ -29,12 +29,12 @@
         <li>
           <div class="item">
             <div class="id">@problem.slug</div>
+            <div class="quality"><div class="rating-display" data-score="@problem.getQualityRating"></div></div>
             <div class="title">
               <a href="@routes.ProblemController.problemDetailPage(problem.slug)">@problem.title</a>
             </div>
-            <div class="rating"><div class="star star-5">5</div></div>
-            <div class="solved">37</div>
-            <div class="difficulty"><div class="star star-5">5</div></div>
+            <div class="solved">@problem.getNumberOfSolvers</div>
+            <div class="difficulty"><div class="rating-display" data-score="@problem.getDifficultyRating"></div></div>
           </div>
         </li>
       }

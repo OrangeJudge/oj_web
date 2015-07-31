@@ -1,5 +1,7 @@
 package models;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlQuery;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -85,21 +87,40 @@ public class Problem extends Model {
     }
 
     public double getQualityRating() {
-        return 0;
+        // TODO: Cache this result.
+        List<ProblemVote> votes = ProblemVote.find.where().eq("problem", this).findList();
+        long sum = 0;
+        for (ProblemVote vote : votes) {
+            sum += vote.rating;
+        }
+        return 1.0 * sum / votes.size();
     }
 
     public double getDifficultyRating() {
-        return 0;
+        // TODO: Cache this result.
+        List<ProblemVote> votes = ProblemVote.find.where().eq("problem", this).findList();
+        long sum = 0;
+        for (ProblemVote vote : votes) {
+            sum += vote.difficulty;
+        }
+        return 1.0 * sum / votes.size();
+    }
+
+    public long getNumberOfSolvers() {
+        String sql = "SELECT COUNT(DISTINCT `user_id`) AS 'solvers' FROM `solution`" +
+                "WHERE `result` = 200 AND `problem_id` = :id";
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        sqlQuery.setParameter("id", id);
+        return sqlQuery.findUnique().getInteger("solvers");
     }
 
     public boolean isSolvedBy(User user) {
-        // TODO: this step must be optimized.
-        for (Solution solution : solutions) {
-            if (solution.user.equals(user)) {
-                return true;
-            }
-        }
-        return false;
+        String sql = "SELECT COUNT(*) AS 'num' FROM `solution`" +
+                "WHERE `result` = 200 AND `problem_id` = :problem AND `user_id` = :user";
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        sqlQuery.setParameter("problem", id);
+        sqlQuery.setParameter("user", user.id);
+        return sqlQuery.findUnique().getInteger("num") > 0;
     }
 
     /**
@@ -138,6 +159,11 @@ public class Problem extends Model {
         return json.toString();
     }
 
+    /**
+     * Generate a Problem object from JSON data.
+     * @param jsonString A string as JSON format.
+     * @return Generated problem.
+     */
     public static Problem fromJson(String jsonString) {
         JsonNode json = Json.parse(jsonString);
         Problem problem = new Problem();
@@ -172,7 +198,7 @@ public class Problem extends Model {
 
     public static Problem importZipFile(File importFile) throws IOException {
         Path tempDirectory = Files.createTempDirectory("imported_problem");
-        Logger.info("Create temperary folder handle packed problem at " + tempDirectory.toAbsolutePath().toString() + ".");
+        Logger.info("Create temporary folder handle packed problem at " + tempDirectory.toAbsolutePath().toString() + ".");
         ZipUtil.unpack(importFile, tempDirectory.toFile());
         File problemFile = new File(tempDirectory.toFile(), "data.json");
         Logger.info("Read from problem file " + problemFile.getAbsolutePath() + ".");

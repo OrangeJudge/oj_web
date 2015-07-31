@@ -23,7 +23,7 @@ window.getSolutionResultBlock = (result, message) ->
     .on("click", displayContentPopup(message))
   else if result >= 100 and message != null
     block = message.split("\n")[0]
-  block
+  return block
 
 window.closeTopNotice = ->
   $(".top-notice").hide(700)
@@ -35,3 +35,16 @@ window.getUrlParameter = (sParam) ->
     sParameterName = sParameterName.split("=")
     if sParameterName[0] == sParam
       return sParameterName[1]
+
+window.enableButton = ($button) ->
+  $button.removeAttr("disabled")
+
+window.disableButton = ($button) ->
+  $button.attr("disabled", "disabled")
+
+$(document).ready ->
+  $(".rating-display").raty
+    path: '/assets/images/raty'
+    readOnly: true
+    score: ->
+      $(this).attr('data-score')

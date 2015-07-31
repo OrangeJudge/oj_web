@@ -9,15 +9,21 @@
       color: darken(@theme, 10%);
     }
   }
-  div.rating, div.id, div.solved, div.difficulty {
+  div.id, div.solved, div.difficulty, div.quality {
     text-align: center;
   }
-  div.id, div.solved {
+  div.quality, div.difficulty {
+    width: 15%;
+  }
+  div.id {
     width: 5%;
   }
   div.title {
-    width: 70%;
+    width: 55%;
     padding-left: 10px;
+  }
+  div.rating-display {
+    width: 100%;
   }
 }
 
@@ -81,5 +87,11 @@
   }
   .content {
     font-size: 13px;
+  }
+}
+
+#rating-body, #limit-body {
+  .col:first-child {
+    text-align: right;
   }
 }

@@ -15,6 +15,13 @@ create table activity (
   constraint pk_activity primary key (id))
 ;
 
+create table client (
+  id                        integer auto_increment not null,
+  name                      varchar(255),
+  secret                    varchar(255),
+  constraint pk_client primary key (id))
+;
+
 create table contest (
   id                        bigint auto_increment not null,
   title                     varchar(255),
@@ -24,6 +31,7 @@ create table contest (
   is_public                 tinyint(1) default 0,
   password                  varchar(255),
   manager_id                bigint,
+  status                    integer,
   create_time               datetime,
   constraint pk_contest primary key (id))
 ;
@@ -157,8 +165,9 @@ create table user (
   name                      varchar(255) not null,
   email                     varchar(255) not null,
   is_email_verified         tinyint(1) default 0,
-  last_email_modified       datetime,
-  last_verification_email_sent datetime,
+  last_email_modified_time  datetime,
+  last_verification_email_sent_time datetime,
+  reset_password_requested_time datetime,
   password                  varchar(255),
   secret                    varchar(255),
   admin_level               integer,
@@ -260,6 +269,8 @@ alter table discussion_user add constraint fk_discussion_user_user_02 foreign ke
 SET FOREIGN_KEY_CHECKS=0;
 
 drop table activity;
+
+drop table client;
 
 drop table contest;
 

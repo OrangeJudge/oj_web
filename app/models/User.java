@@ -1,18 +1,17 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import controllers.OJController;
 import controllers.routes;
 import play.Logger;
 import play.Play;
 import play.cache.Cache;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
-import play.twirl.api.Html;
 import utils.FileUtil;
 import utils.ImageUtil;
 import utils.Mailer;
 import utils.StringHashing;
-import views.html.email.verifyEmail;
 
 import javax.persistence.*;
 import java.io.File;
@@ -25,10 +24,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * User to the system, including system admin and end user.
+ *
+ * @author Xinzi Zhou
+ */
 @Entity
 public class User extends Model {
     @Id
     public long id;
+
+    /**
+     * An unique string identifier of the user.
+     */
     @Constraints.Pattern("^(\\w+)$")
     @Column(unique = true, nullable = false)
     public String name;
@@ -36,10 +44,23 @@ public class User extends Model {
     @Column(unique = true, nullable = false)
     public String email;
     public boolean isEmailVerified = false;
-    public Date lastEmailModified = new Date();
-    public Date lastVerificationEmailSent = new Date();
+    public Date lastEmailModifiedTime = new Date();
+    public Date lastVerificationEmailSentTime = new Date();
 
+    /**
+     * When the user requested for creating a new password.
+     * This time is also used to generate a reset token.
+     */
+    public Date resetPasswordRequestedTime;
+
+    /**
+     * The hashed password of the user.
+     */
     private String password;
+
+    /**
+     * A secret string for the user. Generated programmatically. Invisible to the user and any other clients.
+     */
     public String secret = UUID.randomUUID().toString();
 
     public int adminLevel = 0;
@@ -102,14 +123,14 @@ public class User extends Model {
         }
         email = newEmail;
         isEmailVerified = false;
-        lastEmailModified = new Date();
+        lastEmailModifiedTime = new Date();
         return null;
     }
 
     public static void updateStatus() {
         List<User> pendingVerifyUsers = find.where().eq("isEmailVerified", false).findList();
         for (User user : pendingVerifyUsers) {
-            if ((new Date()).getTime() - user.lastEmailModified.getTime() > ONE_DAY) {
+            if ((new Date()).getTime() - user.lastEmailModifiedTime.getTime() > ONE_DAY) {
                 user.pendingDelete();
             }
         }
@@ -173,8 +194,9 @@ public class User extends Model {
         String secret = Play.application().configuration().getString("application.secret");
         String createTimeString = "" + createTime.getTime();
         String original = secret + email + createTimeString;
-        Logger.debug("Original verification pass: " + original);
-        return StringHashing.sha1(original);
+        String pass = StringHashing.sha1(original);
+        Logger.debug("Verification pass for " + name + " is " + pass);
+        return pass;
     }
 
     @JsonIgnore
@@ -184,10 +206,55 @@ public class User extends Model {
         return siteUrl + verifyPath;
     }
 
-    public void sendVerifyEmail() {
-        lastVerificationEmailSent = new Date();
-        Html content = verifyEmail.render(this);
-        Mailer.sendMail(this, "Verify Your Email Address on OrangeJudge.com", content.toString());
+    @JsonIgnore
+    public String getResetPasswordLink() {
+        String siteUrl = Play.application().configuration().getString("application.siteUrl");
+        String resetUrl = routes.UserController.resetPassWordPage(name, getResetPasswordToken()).toString();
+        return siteUrl + resetUrl;
+    }
+
+    public static final long TEN_MIN = 10 * 60 * 1000;
+
+    public void sendVerifyEmail() throws Exception {
+        if (lastVerificationEmailSentTime != null
+                && ((new Date()).getTime() - lastVerificationEmailSentTime.getTime()) < TEN_MIN
+                && lastEmailModifiedTime.getTime() < lastVerificationEmailSentTime.getTime()) {
+            Logger.info("User verification email is not sent, because of the minimum time duration limit.");
+            throw new Exception("Last verification email is just sent, please check your inbox.");
+        }
+        lastVerificationEmailSentTime = new Date();
+        save();
+        refresh();  // The date in Java and MySQL has different precisions.
+        String content = views.html.email.verifyEmail.render(this).toString();
+        Mailer.sendMail(this, "Verify Your Email Address on " + OJController.getSiteName(), content);
+    }
+
+    public String getResetPasswordToken() {
+        String secret = Play.application().configuration().getString("application.secret");
+        if (resetPasswordRequestedTime == null) {
+            return null;
+        }
+        String resetTimeString = "" + resetPasswordRequestedTime.getTime();
+        String preHashToken = secret + email + resetTimeString;
+        String token = StringHashing.sha1(preHashToken);
+        Logger.debug("Reset password token generated for " + name + " based on " + resetTimeString + " is " + token);
+        return token;
+    }
+
+    /**
+     * Send an email containing link to reset password to user.
+     * @throws Exception When user is not eligible to reset its password.
+     */
+    public void sendResetPasswordEmail() throws Exception {
+        if (resetPasswordRequestedTime != null
+                && (new Date()).getTime() - resetPasswordRequestedTime.getTime() < TEN_MIN) {
+            throw new Exception("We have just send you a password reset email. Please check your inbox.");
+        }
+        resetPasswordRequestedTime = new Date();
+        save();
+        refresh();  // The date in Java and MySQL has different precisions.
+        String content = views.html.email.resetPassword.render(this).toString();
+        Mailer.sendMail(this, "Reset Your Password on " + OJController.getSiteName(), content);
     }
 
     public void setProfileImage(File file) throws Exception {

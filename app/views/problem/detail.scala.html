@@ -32,22 +32,41 @@
         <div class="row">
           <div class="panel">
             <div class="heading">Rating</div>
-            <div class="body">
+            <div id="rating-body" class="body">
               <div class="row">
                 <div class="col col-40">Quality</div>
-                <div class="col col-60">@problem.getQualityRating</div>
+                <div class="col col-60"><div class="rating-display" data-score="@problem.getQualityRating"></div></div>
               </div>
               <div class="row">
                 <div class="col col-40">Difficulty</div>
-                <div class="col col-60">@problem.getDifficultyRating</div>
+                <div class="col col-60"><div class="rating-display" data-score="@problem.getDifficultyRating"></div></div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="panel">
-            <div class="heading">Limit</div>
-            <div class="body"></div>
+            <div class="heading">Judging Information</div>
+            <div id="limit-body" class="body">
+              <div class="row">
+                <div class="col col-50">Time Limit</div>
+                <div class="col col-50">@problem.timeLimit ms</div>
+              </div>
+              <div class="row">
+                <div class="col col-50">Memory Limit</div>
+                <div class="col col-50">@problem.memoryLimit MiB</div>
+              </div>
+              <div class="row">
+                <div class="col col-50">Special Judge?</div>
+                <div class="col col-50">
+                @if(problem.specialJudge) {
+                  Yes
+                } else {
+                  No
+                }
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

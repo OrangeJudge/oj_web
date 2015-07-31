@@ -90,6 +90,32 @@ You may directly import this project as an SBT project.
 }
 ```
 
+## URL and API Design
+
+This section is about the general rules we adopted in Orange Judge.
+
+The AJAX APIs will be in form of:
+
+```
+/asyn/<version>/<domain>/<...>
+```
+
+The current version is `v1`. Please note that these APIs are not stateless. They are designed mainly for web
+front-end's JavaScript interaction. If they are used programmatically, though not suggested, please ensure to
+handle the cookies when necessarily.
+
+Generally, the AJAX APIs will response `200` status code for "happy" situations. This is because most
+front-end libraries including jQuery "prefers" to handle them.
+
+The RESTful APIs will be in form of:
+
+```
+/api/<version>/<domain>/<...>
+```
+
+The current version is `v1`.
+
+
 ## Judge API
 
 ### Judge Status

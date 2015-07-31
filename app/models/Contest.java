@@ -18,6 +18,7 @@ public class Contest extends Model {
     public String password;
     @ManyToOne
     public User manager;
+    public int status = 1; // 0 normal; 1 editing; 2 pending; 3 view only; 4 deleted;
 
     @OneToMany(mappedBy = "contest")
     public List<ContestParticipant> participants;

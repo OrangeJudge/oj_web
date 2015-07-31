@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Contest;
 import models.Problem;
@@ -71,6 +72,11 @@ public class AdminController extends OJController {
     public static Result contestListPage() {
         List<Contest> contests = Contest.find.all();
         return ok(views.html.admin.contestList.render(contests));
+    }
+
+    public static Result contestEditPage(long id) {
+        Contest contest = Contest.find.byId(id);
+        return ok(views.html.admin.contestEdit.render(contest));
     }
 
     public static Result editUserPage(long id) {
@@ -212,5 +218,16 @@ public class AdminController extends OJController {
             e.printStackTrace();
             return ok(jsonResponse(1, "Unable to export problem."));
         }
+    }
+
+    public static Result createContest() {
+        JsonNode in = request().body().asJson();
+        if (in == null) {
+            return formSubmitResponse(1, null, "Expecting Json data.");
+        }
+        Contest contest = new Contest();
+        contest.title = in.get("title").asText();
+        contest.save();
+        return ok(jsonResponse(0, null));
     }
 }

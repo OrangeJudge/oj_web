@@ -1,0 +1,15 @@
+@(contest: Contest)
+
+@admin.frame("Edit Contest", "contest", Seq(
+), Seq()) {
+
+  <div id="problem-list-header" class="row">
+    <div class="col">
+      <h2>Edit Contest #@contest.id @contest.title</h2>
+    </div>
+    <div class="col">
+      <a id="add-problem" href="@routes.AdminController.contestListPage()" class="btn">Back to List</a>
+    </div>
+  </div>
+
+}

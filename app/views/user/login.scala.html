@@ -1,14 +1,17 @@
 @layout("Login", "user", Seq(routes.Assets.versioned("javascripts/login.js").toString()), Seq()) {
-    <h2>Login</h2>
-    <form id="login-form">
-        <label for="username">Username or Email</label>
-        <input class="input" id="username" required>
-        <label for="password">Password</label>
-        <input class="input" id="password" type="password" required>
-        <div class="button-group">
-            <input class="theme" type="submit" value="Login" id="submit">
-            <input type="button" value="Go to Register" id="redirect">
-        </div>
-    </form>
-    <div id="message"></div>
+  <h2>Login</h2>
+  <form id="login-form">
+    <label for="username">Username or Email</label>
+    <input class="input" id="username" tabindex="1" autofocus required>
+    <label for="password">Password</label>
+    <span class="notice notice-transparent">
+      <a href="@routes.UserController.forgetPasswordPage()">Lost your password?</a>
+    </span>
+    <input class="input" id="password" type="password" tabindex="2" required>
+    <div class="button-group">
+      <input class="theme" type="submit" value="Login" id="submit" tabindex="3">
+      <input type="button" value="Go to Register" id="redirect">
+    </div>
+  </form>
+  <div id="message"></div>
 }
